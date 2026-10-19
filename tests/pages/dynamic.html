@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Contenu dynamique</title>
+    <style>body{font:16px/1.5 system-ui,sans-serif;margin:40px;background:#fff8ec} .state{padding:20px;border-radius:12px;background:#ffe2b8;font-size:22px} input{font:18px system-ui;padding:8px;width:320px}</style>
+  </head>
+  <body>
+    <h1>Page modifiée après chargement</h1>
+    <p id="loading" class="state">Chargement en cours… (ce texte ne doit PAS apparaître)</p>
+    <p><label>Champ rempli : <input id="field" value="" /></label></p>
+    <script>
+      setTimeout(() => {
+        document.getElementById('loading').textContent = 'État généré par JavaScript : 42 éléments prêts';
+        document.title = 'Contenu dynamique (prêt)';
+      }, 600);
+    </script>
+  </body>
+</html>

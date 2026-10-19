@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Page statique dense</title>
+    <style>
+      body { margin: 0; font: 16px/1.55 Georgia, serif; color: #222; background: #fff; }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 40px 24px; }
+      .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin: 18px 0; }
+      .tile { height: 140px; border-radius: 12px; }
+      p { margin: 0 0 14px; }
+      .stripe { height: 3px; background: repeating-linear-gradient(90deg, #000 0 2px, #fff 2px 4px); margin: 10px 0; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap" id="w"></div>
+    <script>
+      const w = document.getElementById('w');
+      for (let i = 0; i < 40; i++) {
+        const h = document.createElement('h2');
+        h.textContent = `Bloc ${i} — repère de raccord`;
+        const p = document.createElement('p');
+        p.textContent = 'Texte dense pour détecter le moindre décalage entre deux tranches. '.repeat(6);
+        const row = document.createElement('div');
+        row.className = 'row';
+        for (let j = 0; j < 3; j++) {
+          const t = document.createElement('div');
+          t.className = 'tile';
+          t.style.background = `linear-gradient(${(i * 37 + j * 61) % 360}deg, hsl(${(i * 29 + j * 90) % 360} 70% 55%), hsl(${(i * 53 + j * 30) % 360} 60% 35%))`;
+          row.append(t);
+        }
+        const s = document.createElement('div');
+        s.className = 'stripe';
+        w.append(h, p, row, s);
+      }
+    </script>
+  </body>
+</html>

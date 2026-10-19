@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Réglages — Web2PDF Exact</title>
+    <link rel="icon" href="../icons/icon.svg" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <img src="../icons/icon.svg" alt="" width="44" height="44" />
+      <div>
+        <h1>Web2PDF Exact</h1>
+        <p>Chaque réglage est enregistré dès qu’il change et sert de valeur par défaut à la popup, au menu contextuel et aux raccourcis.</p>
+      </div>
+      <span class="saved" id="saved" aria-live="polite"></span>
+    </header>
+
+    <nav class="toc" aria-label="Sections">
+      <a href="#moteur">Moteur</a>
+      <a href="#capture">Capture</a>
+      <a href="#qualite">Qualité</a>
+      <a href="#page">Mise en page</a>
+      <a href="#contenu">Contenu du PDF</a>
+      <a href="#fichier">Fichier</a>
+      <a href="#vectoriel">Vectoriel</a>
+      <a href="#raccourcis">Raccourcis</a>
+    </nav>
+
+    <main>
+      <section id="moteur" class="card">
+        <h2>Moteur de rendu</h2>
+        <div class="choices">
+          <label class="choice">
+            <input type="radio" name="engine" value="exact" />
+            <span>
+              <strong>Exact, au pixel près</strong> <em class="tag">recommandé</em>
+              <small>Le navigateur dessine la page avec son propre moteur et l’image est placée dans le PDF : CSS, polices, canvas, vidéos et iframes sont reproduits à l’identique. Un calque de texte invisible rend le texte sélectionnable et cherchable ; liens et signets restent actifs.</small>
+            </span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="engine" value="vector" />
+            <span>
+              <strong>Vectoriel, via l’impression</strong>
+              <small>Utilise « Enregistrer en PDF » du navigateur après avoir forcé les styles d’écran. Texte vectoriel et fichier très léger, mais certains sites changent de mise en page à l’impression. Une boîte de dialogue demande où enregistrer.</small>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section id="capture" class="card">
+        <h2>Capture</h2>
+        <div class="grid">
+          <label class="field">
+            <span>Zone par défaut</span>
+            <select name="scope">
+              <option value="full">Page entière</option>
+              <option value="visible">Zone visible</option>
+              <option value="element">Élément choisi</option>
+              <option value="region">Zone tracée</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Méthode</span>
+            <select name="captureMethod">
+              <option value="auto">Automatique (recommandé)</option>
+              <option value="scroll">Défilement : tranche par tranche</option>
+              <option value="direct">Rendu direct, sans défilement</option>
+            </select>
+            <small>Le défilement déclenche les images différées, les animations d’apparition et les listes virtuelles. Le rendu direct est instantané et évite les raccords sur les effets de parallaxe.</small>
+          </label>
+          <label class="field">
+            <span>Éléments fixes (en-tête collant, chat, bandeau…)</span>
+            <select name="floating">
+              <option value="once">Affichés une seule fois, en haut</option>
+              <option value="hide">Masqués</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Attente maximale après chaque défilement</span>
+            <span class="unit"><input type="number" name="settleDelay" min="0" max="5000" step="50" /> ms</span>
+            <small>La capture repart dès que la page est stable ; à augmenter pour les sites lents ou très animés.</small>
+          </label>
+          <label class="field">
+            <span>Délai avant capture</span>
+            <span class="unit"><input type="number" name="startDelay" min="0" max="60" step="1" /> s</span>
+            <small>Le temps d’ouvrir un menu ou de survoler un élément à figer.</small>
+          </label>
+          <label class="field">
+            <span>Hauteur maximale</span>
+            <span class="unit"><input type="number" name="maxHeight" min="1000" max="500000" step="1000" /> px</span>
+            <small>Garde-fou pour les pages à défilement infini.</small>
+          </label>
+        </div>
+        <div class="checks">
+          <label class="check"><input type="checkbox" name="preloadLazy" /> Précharger toute la page avant la capture (images différées, contenus chargés au défilement)</label>
+          <label class="check"><input type="checkbox" name="freezeAnimations" /> Terminer instantanément transitions et animations (pas d’éléments à moitié apparus)</label>
+          <label class="check"><input type="checkbox" name="scrollContainer" /> Dérouler le conteneur défilant des applications web (messageries, documents, tableaux de bord)</label>
+          <label class="check"><input type="checkbox" name="horizontalOverflow" /> Inclure le débordement horizontal (pages plus larges que l’écran)</label>
+          <label class="check"><input type="checkbox" name="cleanupBefore" /> Toujours proposer de retirer des éléments avant la capture</label>
+        </div>
+      </section>
+
+      <section id="qualite" class="card">
+        <h2>Qualité d’image</h2>
+        <div class="grid">
+          <label class="field">
+            <span>Netteté (pixels par pixel CSS)</span>
+            <select name="pixelRatio">
+              <option value="0">Celle de l’écran</option>
+              <option value="1">×1 — fichier léger</option>
+              <option value="1.5">×1,5</option>
+              <option value="2">×2 — net à l’impression</option>
+              <option value="3">×3 — très net</option>
+              <option value="4">×4 — zoom extrême</option>
+            </select>
+            <small>« Celle de l’écran » reproduit exactement ce que vous voyez (×2 sur un écran Retina).</small>
+          </label>
+          <label class="field">
+            <span>Compression</span>
+            <select name="imageFormat">
+              <option value="auto">Automatique</option>
+              <option value="lossless">Toujours sans perte</option>
+              <option value="jpeg">Toujours JPEG</option>
+            </select>
+            <small>Automatique : sans perte pour le texte et les aplats, JPEG pour les photos.</small>
+          </label>
+          <label class="field">
+            <span>Qualité JPEG : <output id="jpegQualityOut"></output></span>
+            <input type="range" name="jpegQuality" min="50" max="100" step="1" />
+            <small>À partir de 90, les couleurs ne sont pas sous-échantillonnées.</small>
+          </label>
+        </div>
+      </section>
+
+      <section id="page" class="card">
+        <h2>Mise en page</h2>
+        <div class="grid">
+          <label class="field">
+            <span>Format</span>
+            <select name="pageFormat">
+              <option value="single">Page unique (sans coupure)</option>
+              <option value="a4">A4</option>
+              <option value="a3">A3</option>
+              <option value="a5">A5</option>
+              <option value="letter">Lettre US</option>
+              <option value="legal">Légal US</option>
+              <option value="tabloid">Tabloïd</option>
+              <option value="screen">Écran (une page par écran)</option>
+              <option value="custom">Personnalisé</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Orientation</span>
+            <select name="orientation">
+              <option value="portrait">Portrait</option>
+              <option value="landscape">Paysage</option>
+            </select>
+          </label>
+          <label class="field" data-show="custom">
+            <span>Largeur personnalisée</span>
+            <span class="unit"><input type="number" name="customWidthMm" min="20" max="5000" step="1" /> mm</span>
+          </label>
+          <label class="field" data-show="custom">
+            <span>Hauteur personnalisée</span>
+            <span class="unit"><input type="number" name="customHeightMm" min="20" max="5000" step="1" /> mm</span>
+          </label>
+          <label class="field">
+            <span>Échelle sur le papier</span>
+            <select name="fit">
+              <option value="width">Ajuster à la largeur de la page</option>
+              <option value="actual">Taille réelle (96 ppp)</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Couleur des marges</span>
+            <select name="marginColor">
+              <option value="page">Couleur de fond de la page</option>
+              <option value="white">Blanc</option>
+            </select>
+          </label>
+        </div>
+        <fieldset class="margins">
+          <legend>Marges (mm)</legend>
+          <label>Haut <input type="number" name="marginTop" min="0" max="100" step="1" /></label>
+          <label>Droite <input type="number" name="marginRight" min="0" max="100" step="1" /></label>
+          <label>Bas <input type="number" name="marginBottom" min="0" max="100" step="1" /></label>
+          <label>Gauche <input type="number" name="marginLeft" min="0" max="100" step="1" /></label>
+        </fieldset>
+        <div class="checks">
+          <label class="check"><input type="checkbox" name="smartBreaks" /> Coupures intelligentes : ne jamais trancher une ligne de texte ou une image entre deux pages</label>
+          <label class="check"><input type="checkbox" name="limitPageSize" /> Page unique : rester sous 200 pouces (compatibilité Acrobat ; l’image garde sa pleine résolution)</label>
+          <label class="check"><input type="checkbox" name="headerFooter" /> En-tête (titre, adresse) et pied de page (date, numéro de page)</label>
+        </div>
+      </section>
+
+      <section id="contenu" class="card">
+        <h2>Contenu du PDF</h2>
+        <div class="checks">
+          <label class="check"><input type="checkbox" name="textLayer" /> Texte sélectionnable, copiable et cherchable (calque invisible aligné sur l’image)</label>
+          <label class="check"><input type="checkbox" name="links" /> Liens cliquables, y compris les ancres internes de la page</label>
+          <label class="check"><input type="checkbox" name="bookmarks" /> Signets générés à partir des titres de la page</label>
+        </div>
+      </section>
+
+      <section id="fichier" class="card">
+        <h2>Fichier</h2>
+        <div class="grid">
+          <label class="field wide">
+            <span>Nom du fichier</span>
+            <input type="text" name="filenameTemplate" spellcheck="false" />
+            <small>
+              Variables : <code>{title}</code> <code>{domain}</code> <code>{host}</code> <code>{path}</code>
+              <code>{date}</code> <code>{time}</code> <code>{datetime}</code>. Utilisez « / » pour ranger dans des
+              sous-dossiers du dossier de téléchargement, par exemple <code>Web2PDF/{domain}/{date} {title}</code>.
+            </small>
+            <small class="preview">Aperçu : <span id="filenamePreview"></span></small>
+          </label>
+          <label class="field">
+            <span>Après la conversion</span>
+            <select name="afterAction">
+              <option value="download">Télécharger</option>
+              <option value="download-open">Télécharger et ouvrir dans un onglet</option>
+              <option value="open">Ouvrir seulement (aperçu, à enregistrer soi-même)</option>
+            </select>
+          </label>
+        </div>
+        <div class="checks">
+          <label class="check"><input type="checkbox" name="saveAs" /> Demander où enregistrer chaque fichier</label>
+          <label class="check"><input type="checkbox" name="notify" /> Notification à la fin (cliquer dessus ouvre le PDF)</label>
+        </div>
+      </section>
+
+      <section id="vectoriel" class="card">
+        <h2>Moteur vectoriel</h2>
+        <div class="checks">
+          <label class="check"><input type="checkbox" name="vectorEmulateScreen" /> Imprimer avec les styles d’écran (neutralise les règles <code>@media print</code> de la page)</label>
+          <label class="check"><input type="checkbox" name="vectorFitWidth" /> Mettre en page à la largeur de l’écran puis réduire pour tenir sur le papier</label>
+        </div>
+        <p class="note">Limites connues de l’impression : les sections hautes d’un écran (<code>100vh</code>) prennent la hauteur du papier, et les feuilles de style d’autres domaines ne peuvent pas être adaptées. Le moteur exact n’a aucune de ces limites.</p>
+      </section>
+
+      <section id="raccourcis" class="card">
+        <h2>Raccourcis clavier</h2>
+        <p><kbd>Alt</kbd> + <kbd>Maj</kbd> + <kbd>P</kbd> ouvre la popup. Des raccourcis directs existent aussi (page entière, zone visible, élément, zone tracée) : attribuez-les dans <strong>about:addons</strong> → roue dentée → <strong>Gérer les raccourcis d’extensions</strong>.</p>
+        <p>Pendant une capture, <kbd>Échap</kbd> l’interrompt et remet la page dans son état d’origine.</p>
+      </section>
+
+      <div class="actions">
+        <button type="button" id="reset">Rétablir les réglages par défaut</button>
+      </div>
+    </main>
+
+    <footer>
+      <span>Web2PDF Exact <span id="version"></span></span>
+      <span class="credit">Conçu avec l’aide des ressources de Wheeloh</span>
+    </footer>
+
+    <script src="../lib/settings.js"></script>
+    <script src="../lib/filename.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

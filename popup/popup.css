@@ -1,0 +1,400 @@
+:root {
+  --bg: #ffffff;
+  --panel: #f4f5f8;
+  --panel-2: #e9ebf1;
+  --text: #16181d;
+  --muted: #646b7a;
+  --line: #dde0e8;
+  --accent: #4c6fff;
+  --accent-text: #ffffff;
+  --accent-soft: #e8edff;
+  --ok: #15803d;
+  --ok-soft: #e7f6ec;
+  --err: #c62828;
+  --err-soft: #fdecec;
+  --warn: #8a5a00;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1d22;
+    --panel: #26282f;
+    --panel-2: #30333b;
+    --text: #eceef3;
+    --muted: #9aa1b0;
+    --line: #363944;
+    --accent: #7088ff;
+    --accent-text: #0d1020;
+    --accent-soft: #2b3254;
+    --ok: #5fd08a;
+    --ok-soft: #1f3327;
+    --err: #ff8a8a;
+    --err-soft: #3a2224;
+    --warn: #f2c063;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  width: 360px;
+  padding: 14px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+button,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  flex: none;
+}
+
+.titles {
+  flex: 1;
+  min-width: 0;
+}
+
+h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.page {
+  margin: 1px 0 0;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+
+.icon-btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--panel);
+  color: var(--text);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row select {
+  flex: 1;
+  min-width: 0;
+}
+
+.seg {
+  display: flex;
+  padding: 3px;
+  gap: 2px;
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.seg button {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 4px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.seg button:hover {
+  color: var(--text);
+}
+
+.seg button[aria-checked='true'] {
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--line);
+}
+
+.seg button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.seg.compact {
+  flex: none;
+}
+
+.seg.compact button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  flex: none;
+}
+
+select {
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--bg);
+}
+
+.more {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0 10px;
+}
+
+.more[open] {
+  padding-bottom: 10px;
+}
+
+.more summary {
+  padding: 8px 0;
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 500;
+  list-style-position: inside;
+}
+
+.more[open] summary {
+  margin-bottom: 4px;
+}
+
+.more .seg {
+  margin-bottom: 4px;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.check input {
+  margin: 2px 0 0;
+  accent-color: var(--accent);
+}
+
+.hint {
+  margin: 2px 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 42px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.primary:hover {
+  filter: brightness(1.06);
+}
+
+.primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.primary kbd {
+  font: 11px/1 system-ui, sans-serif;
+  padding: 3px 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.notice {
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  background: var(--accent);
+  transition: width 0.2s;
+}
+
+.fill.indeterminate {
+  width: 30%;
+  animation: slide 1.1s ease-in-out infinite;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.link {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--ok-soft);
+}
+
+.result-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.result-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.result-actions button {
+  flex: 1;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.result-actions button:hover {
+  border-color: var(--accent);
+}
+
+.warn {
+  margin: 0;
+  color: var(--warn);
+  font-size: 12px;
+}
+
+.error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--err-soft);
+  color: var(--err);
+}
+
+footer {
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 11px;
+}
+
+.credit {
+  color: var(--muted);
+}
+
+[hidden] {
+  display: none !important;
+}

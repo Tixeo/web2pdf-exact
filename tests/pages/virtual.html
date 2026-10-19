@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Liste virtualisée</title>
+    <style>
+      body { margin: 0; font: 16px system-ui, sans-serif; }
+      #list { position: relative; }
+      .row { position: absolute; left: 0; right: 0; height: 56px; display: flex; align-items: center; padding: 0 24px; border-bottom: 1px solid #e3e3ea; }
+    </style>
+  </head>
+  <body>
+    <div id="list"></div>
+    <script>
+      // Comme react-window : seules les lignes proches de l'écran existent dans le DOM.
+      const N = 300, H = 56, list = document.getElementById('list');
+      list.style.height = N * H + 'px';
+      const rows = new Map();
+      function render() {
+        const top = window.scrollY - list.offsetTop, bottom = top + innerHeight;
+        const first = Math.max(0, Math.floor(top / H) - 2), last = Math.min(N - 1, Math.ceil(bottom / H) + 2);
+        for (const [i, el] of rows) if (i < first || i > last) { el.remove(); rows.delete(i); }
+        for (let i = first; i <= last; i++) {
+          if (rows.has(i)) continue;
+          const el = document.createElement('div');
+          el.className = 'row';
+          el.style.top = i * H + 'px';
+          el.style.background = i % 2 ? '#fff' : '#f4f6fb';
+          el.textContent = `Ligne virtuelle ${i + 1} sur ${N}`;
+          list.append(el);
+          rows.set(i, el);
+        }
+      }
+      addEventListener('scroll', render, { passive: true });
+      addEventListener('resize', render);
+      render();
+    </script>
+  </body>
+</html>

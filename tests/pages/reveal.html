@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Apparitions tardives</title>
+    <style>
+      body { margin: 0; font: 18px/1.5 system-ui, sans-serif; background: #f7f7fb; }
+      .item { height: 260px; margin: 40px auto; width: 70%; border-radius: 18px; display: grid; place-items: center;
+              color: #fff; font-size: 26px; font-weight: 700; opacity: 0; transform: scale(0.85); transition: opacity 1.2s, transform 1.2s; }
+      .item.on { opacity: 1; transform: none; }
+    </style>
+  </head>
+  <body>
+    <script>
+      for (let i = 1; i <= 24; i++) {
+        const d = document.createElement('div');
+        d.className = 'item';
+        d.style.background = `hsl(${i * 15} 65% 45%)`;
+        d.textContent = `Apparition tardive ${i}`;
+        document.body.append(d);
+      }
+      // Révélé seulement aux deux tiers visible, masqué de nouveau en sortant (once: false).
+      const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('on', e.isIntersecting)), { threshold: 0.66 });
+      document.querySelectorAll('.item').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

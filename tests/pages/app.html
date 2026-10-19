@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Messagerie — application web</title>
+    <style>
+      html, body { height: 100%; margin: 0; overflow: hidden; font: 15px/1.45 system-ui, sans-serif; }
+      .app { display: grid; grid-template-rows: 56px 1fr; grid-template-columns: 240px 1fr; height: 100%; }
+      .top { grid-column: 1 / -1; display: flex; align-items: center; padding: 0 20px; background: #5b3cc4; color: #fff; font-weight: 700; }
+      .side { background: #f1eefb; padding: 16px; border-right: 1px solid #ddd5f5; }
+      .side div { padding: 8px 10px; border-radius: 8px; margin-bottom: 4px; }
+      .side .on { background: #ddd5f5; font-weight: 600; }
+      .main { overflow-y: auto; padding: 0 28px 28px; background: #fff; }
+      .day { position: sticky; top: 0; padding: 8px 0; background: rgba(255,255,255,.95); color: #6b5fa8; font-weight: 600; text-align: center; }
+      .msg { max-width: 560px; margin: 10px 0; padding: 10px 14px; border-radius: 14px; background: #f3f3f6; }
+      .msg.me { margin-left: auto; background: #5b3cc4; color: #fff; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="top">Messagerie Démo</div>
+      <div class="side"><div class="on">Équipe produit</div><div>Support</div><div>Général</div><div>Archives</div></div>
+      <div class="main" id="main"></div>
+    </div>
+    <script>
+      const main = document.getElementById('main');
+      for (let d = 1; d <= 4; d++) {
+        const day = document.createElement('div');
+        day.className = 'day';
+        day.textContent = `Jour ${d}`;
+        main.append(day);
+        for (let i = 1; i <= 30; i++) {
+          const n = (d - 1) * 30 + i;
+          const m = document.createElement('div');
+          m.className = 'msg' + (n % 3 === 0 ? ' me' : '');
+          m.textContent = `Message n°${n} — contenu du fil de discussion.`;
+          main.append(m);
+        }
+      }
+    </script>
+  </body>
+</html>

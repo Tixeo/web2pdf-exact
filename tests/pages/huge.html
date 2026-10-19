@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Très longue page</title>
+    <style>body{margin:0;font:700 40px system-ui,sans-serif} .band{height:1000px;display:flex;align-items:center;justify-content:center;color:#fff}</style>
+  </head>
+  <body>
+    <script>
+      for (let i = 0; i < 60; i++) {
+        const d = document.createElement('div');
+        d.className = 'band';
+        d.style.background = `hsl(${(i * 47) % 360} 55% 42%)`;
+        d.textContent = `Bande ${i}`;
+        document.body.append(d);
+      }
+    </script>
+  </body>
+</html>
