@@ -2,6 +2,7 @@
 // Page d'options : chaque champ porte le nom d'un réglage et s'enregistre dès qu'il change.
 
 const $ = (id) => document.getElementById(id);
+const { t } = W2P.i18n;
 const SCHEMA = W2P.SETTINGS_SCHEMA;
 let settings = null;
 let savedTimer = 0;
@@ -21,7 +22,7 @@ function render() {
         el.value = String(value);
         if (el.value !== String(value)) {
           // Valeur hors liste (ex. netteté 2,5) : on l'ajoute pour l'afficher fidèlement.
-          const opt = new Option(`×${String(value).replace('.', ',')}`, String(value));
+          const opt = new Option(`×${new Intl.NumberFormat(W2P.i18n.lang()).format(value)}`, String(value));
           el.add(opt);
           el.value = String(value);
         }
@@ -36,8 +37,8 @@ function render() {
   for (const el of fields('limitPageSize')) el.disabled = settings.pageFormat !== 'single';
   for (const el of fields('jpegQuality')) el.disabled = settings.imageFormat === 'lossless';
   $('filenamePreview').textContent = W2P.buildFilename(settings.filenameTemplate, {
-    title: 'Titre de la page',
-    url: 'https://www.exemple.fr/blog/article',
+    title: t('previewTitle'),
+    url: 'https://www.example.com/blog/article',
     date: new Date().toISOString(),
   });
 }
@@ -51,7 +52,7 @@ function valueOf(el) {
 
 function flashSaved() {
   const el = $('saved');
-  el.textContent = 'Enregistré';
+  el.textContent = t('saved');
   el.classList.add('on');
   clearTimeout(savedTimer);
   savedTimer = setTimeout(() => el.classList.remove('on'), 1400);
@@ -79,7 +80,7 @@ document.addEventListener('input', (e) => {
 });
 
 $('reset').addEventListener('click', async () => {
-  if (!window.confirm('Rétablir tous les réglages par défaut ?')) return;
+  if (!window.confirm(t('confirmReset'))) return;
   settings = await W2P.resetSettings();
   render();
   flashSaved();
@@ -93,6 +94,8 @@ browser.storage.onChanged.addListener((changes, area) => {
 });
 
 (async () => {
+  W2P.i18n.apply();
+  document.title = t('optPageTitle');
   $('version').textContent = browser.runtime.getManifest().version;
   settings = await W2P.loadSettings();
   render();

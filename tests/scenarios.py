@@ -421,7 +421,14 @@ def popup_and_options(s, r, out, info):
         errors = s.m.js("return document.querySelectorAll('[data-key], [name]').length")
         r.check(name, f"{page} affichée", errors > 5, f"{errors} contrôles")
         credit = s.m.js("return document.querySelector('.credit') && document.querySelector('.credit').textContent")
-        r.check(name, f"{page} : mention Wheeloh visible", credit == "Conçu avec l’aide des ressources de Wheeloh", credit)
+        r.check(
+            name,
+            f"{page} : mention Wheeloh visible",
+            credit in ("Conçu avec l’aide des ressources de Wheeloh", "Designed with the help of Wheeloh resources"),
+            credit,
+        )
+        untranslated = s.m.js("return [...document.querySelectorAll('[data-i18n]')].filter((e) => !e.textContent.trim()).map((e) => e.dataset.i18n)")
+        r.check(name, f"{page} : tous les textes traduits", not untranslated, str(untranslated[:5]))
         s.m.cmd("WebDriver:CloseWindow")
         s.m.switch(s.target, focus=True)
 
@@ -710,3 +717,144 @@ def cancel_escape(s, r, out, info):
 
 
 CASES.extend([open_in_tab, cancel_escape])
+
+
+def _right_click(m, x, y):
+    _actions(m, _mouse([
+        {"type": "pointerMove", "x": int(x), "y": int(y), "origin": "viewport", "duration": 30},
+        {"type": "pointerDown", "button": 2},
+        {"type": "pointerUp", "button": 2},
+    ]))
+
+
+def _menu(s, script, args=None):
+    s.m.cmd("Marionette:SetContext", {"value": "chrome"})
+    try:
+        return s.m.js(script, args or [])
+    finally:
+        s.m.cmd("Marionette:SetContext", {"value": "content"})
+
+
+def _wait_pdf(s, before, timeout=180):
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        new = [p for p in s.dl.glob("*.pdf") if p not in before]
+        if new and all(p.stat().st_size > 0 for p in new):
+            time.sleep(1.0)
+            return max(new, key=lambda p: p.stat().st_mtime)
+        time.sleep(0.5)
+    return None
+
+
+def context_menu(s, r, out, info):
+    """Clic droit : entrée directe en un clic, puis « Cet élément… » depuis l'élément cliqué"""
+    name = "context_menu"
+    url = s.open("article.html")
+    time.sleep(1.0)
+    s.m.switch(s.harness, focus=False)
+    s.m.js("window.postMessage({type: 'w2p-set-settings', patch: {contextMenu: 'direct'}}, '*')")
+    s.m.switch(s.target, focus=True)
+    time.sleep(1.0)
+    _right_click(s.m, 600, 300)
+    time.sleep(1.0)
+    found = _menu(s, """
+        const menu = document.getElementById('contentAreaContextMenu');
+        const item = [...menu.querySelectorAll('menuitem')].find((e) => (e.id || '').endsWith('_w2p-page'));
+        if (!item) return null;
+        const info = {label: item.getAttribute('label'), topLevel: item.parentNode === menu};
+        menu.hidePopup();
+        return info;
+    """)
+    r.check(name, "entrée directe au premier niveau du menu", bool(found and found["topLevel"]), str(found))
+    before = set(s.dl.glob("*.pdf"))
+    _right_click(s.m, 600, 300)
+    time.sleep(1.0)
+    _menu(s, """
+        const menu = document.getElementById('contentAreaContextMenu');
+        const item = [...menu.querySelectorAll('menuitem')].find((e) => (e.id || '').endsWith('_w2p-page'));
+        item.click();
+        menu.hidePopup();
+    """)
+    pdf = _wait_pdf(s, before)
+    r.check(name, "« Convertir la page en PDF » produit le PDF", pdf is not None)
+    if pdf:
+        d = info(pdf, 36)
+        r.check(name, "page entière convertie", "FIN DE LA PAGE" in d["pages"][0]["text"])
+
+    # Sous-menu complet : « Cet élément… » part de l'élément sous la souris.
+    s.m.switch(s.harness, focus=False)
+    s.m.js("window.postMessage({type: 'w2p-set-settings', patch: {contextMenu: 'full'}}, '*')")
+    s.m.switch(s.target, focus=True)
+    time.sleep(1.0)
+    s.m.js("document.querySelector('table').scrollIntoView({block: 'center', behavior: 'instant'})")
+    time.sleep(0.5)
+    x, y, w, h = _rect(s.m, "table")
+    _right_click(s.m, x + w / 2, y + h / 2)
+    time.sleep(1.0)
+    labels = _menu(s, """
+        const menu = document.getElementById('contentAreaContextMenu');
+        const root = [...menu.querySelectorAll('menu')].find((e) => (e.id || '').endsWith('_w2p-root'));
+        return root ? [...root.querySelectorAll('menuitem')].map((e) => e.getAttribute('label')) : null;
+    """)
+    r.check(name, "sous-menu complet (6 entrées)", bool(labels) and len(labels) == 6, str(labels))
+    before = set(s.dl.glob("*.pdf"))
+    _menu(s, """
+        const menu = document.getElementById('contentAreaContextMenu');
+        const item = [...menu.querySelectorAll('menuitem')].find((e) => (e.id || '').endsWith('_w2p-element'));
+        item.click();
+        menu.hidePopup();
+    """)
+    time.sleep(1.5)
+    # L'élément de départ est la cellule cliquée : ↑ trois fois remonte jusqu'au tableau.
+    for _ in range(3):
+        _actions(s.m, _key(ARROW_UP))
+        time.sleep(0.15)
+    _actions(s.m, _key(ENTER))
+    pdf = _wait_pdf(s, before)
+    r.check(name, "« Cet élément… » produit le PDF", pdf is not None)
+    if pdf:
+        d = info(pdf, 72)
+        text = d["pages"][0]["text"]
+        r.check(name, "seul l'élément cliqué (tableau) est converti", "Juillet" in text and "Le grand test" not in text)
+    s.m.switch(s.harness, focus=False)
+    s.m.js("window.postMessage({type: 'w2p-set-settings', patch: {contextMenu: 'direct'}}, '*')")
+    s.m.switch(s.target, focus=True)
+
+
+CASES.append(context_menu)
+
+
+def strict_csp(s, r, out, info):
+    """Site à politique de sécurité stricte (CSP) : capture et outils de sélection fonctionnent"""
+    name = "strict_csp"
+    url = s.open("csp.html")
+    time.sleep(0.8)
+    res = s.convert(url, "full", {"pageFormat": "single"})
+    if not _ok(r, name, res):
+        return _save(out, res)
+    d = info(res["path"], 36)
+    text = d["pages"][0]["text"]
+    r.check(name, "page entière capturée malgré la CSP", "FIN DE LA PAGE CSP" in text and text.count("EN-TÊTE PROTÉGÉ") == 1)
+    s.m.js("document.getElementById('t').scrollIntoView({block: 'center', behavior: 'instant'})")
+    time.sleep(0.4)
+    x, y, w, h = _rect(s.m, "#t")
+
+    def pick(m):
+        _actions(m, _mouse([{"type": "pointerMove", "x": int(x + w / 2), "y": int(y + h / 2), "origin": "viewport", "duration": 50}]))
+        time.sleep(0.4)
+        visible = m.js("const o = document.getElementById('__web2pdf_exact_overlay__'); return !!o && getComputedStyle(o).position === 'fixed';")
+        r.check(name, "barre d'outils de sélection affichée (styles autorisés)", bool(visible))
+        for _ in range(3):
+            _actions(m, _key(ARROW_UP))
+            time.sleep(0.15)
+        _actions(m, _key(ENTER))
+
+    res = s.convert(url, "element", {"pageFormat": "single"}, interact=pick)
+    if not _ok(r, name, res):
+        return _save(out, res)
+    d = info(res["path"], 72)
+    text = d["pages"][0]["text"]
+    r.check(name, "élément choisi converti", "42 unités" in text and "Politique de sécurité" not in text)
+
+
+CASES.append(strict_csp)

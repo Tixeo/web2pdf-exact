@@ -1,0 +1,674 @@
+{
+  "extName": {
+    "message": "Web2PDF Exact"
+  },
+  "extDescription": {
+    "message": "Turns the page you are viewing into a PDF identical to the screen: native browser rendering, no reload, selectable text, links and bookmarks."
+  },
+  "actionTitle": {
+    "message": "Web2PDF Exact — convert this page to PDF"
+  },
+  "cmdOpen": {
+    "message": "Open Web2PDF Exact"
+  },
+  "cmdFull": {
+    "message": "Convert the whole page to PDF (default settings)"
+  },
+  "cmdVisible": {
+    "message": "Convert the visible area to PDF"
+  },
+  "cmdElement": {
+    "message": "Pick an element to convert to PDF"
+  },
+  "cmdRegion": {
+    "message": "Draw an area to convert to PDF"
+  },
+  "credit": {
+    "message": "Designed with the help of Wheeloh resources"
+  },
+  "pdfProducer": {
+    "message": "Web2PDF Exact — Designed with the help of Wheeloh resources"
+  },
+  "pdfUntitled": {
+    "message": "Web page"
+  },
+  "menuConvertPage": {
+    "message": "Convert page to PDF"
+  },
+  "menuFull": {
+    "message": "Whole page to PDF"
+  },
+  "menuVisible": {
+    "message": "Visible area to PDF"
+  },
+  "menuElement": {
+    "message": "Pick an element…"
+  },
+  "menuElementHere": {
+    "message": "This element…"
+  },
+  "menuRegion": {
+    "message": "Draw an area…"
+  },
+  "menuVector": {
+    "message": "Whole page (vector, via printing)"
+  },
+  "menuSettings": {
+    "message": "Settings…"
+  },
+  "phaseStart": {
+    "message": "Getting ready…"
+  },
+  "phasePick": {
+    "message": "Waiting for your selection in the page…"
+  },
+  "phasePrepare": {
+    "message": "Preparing the page…"
+  },
+  "phasePreload": {
+    "message": "Loading deferred content…"
+  },
+  "phaseCapture": {
+    "message": "Capturing the page…"
+  },
+  "phaseBuild": {
+    "message": "Assembling the PDF…"
+  },
+  "phaseSave": {
+    "message": "Saving…"
+  },
+  "phasePrint": {
+    "message": "Vector printing…"
+  },
+  "phasePaused": {
+    "message": "Paused: come back to the tab to continue…"
+  },
+  "restrictedBadUrl": {
+    "message": "Unreadable page address."
+  },
+  "restrictedReader": {
+    "message": "Reader view is an internal page: extensions cannot capture it pixel for pixel. Use the “Vector” engine or leave reader view."
+  },
+  "restrictedInternal": {
+    "message": "This internal browser page is protected: no extension can access it."
+  },
+  "restrictedHost": {
+    "message": "The browser does not allow extensions to access $1."
+  },
+  "noticeReader": {
+    "message": "Reader view: only the “Vector” engine can convert this view."
+  },
+  "noticeInternal": {
+    "message": "Internal browser page: extensions have no access to it."
+  },
+  "errBusy": {
+    "message": "A capture is already running in this tab."
+  },
+  "errInject": {
+    "message": "Cannot access this page ($1). Internal browser pages and some protected sites are off-limits to extensions."
+  },
+  "errReloaded": {
+    "message": "The page was reloaded or closed during the capture."
+  },
+  "errNoResponse": {
+    "message": "The page is not responding."
+  },
+  "errCaptureFailed": {
+    "message": "The capture failed."
+  },
+  "errNoImage": {
+    "message": "No image could be captured."
+  },
+  "errDownload": {
+    "message": "Download refused: $1"
+  },
+  "errNoPrint": {
+    "message": "This browser does not offer PDF printing to extensions."
+  },
+  "errPrepare": {
+    "message": "The page could not be prepared."
+  },
+  "errNotSaved": {
+    "message": "The PDF could not be saved."
+  },
+  "errCaptureRefused": {
+    "message": "The browser refused to capture this page."
+  },
+  "errCapture": {
+    "message": "Capture failed: $1"
+  },
+  "errUnexpectedTab": {
+    "message": "Unexpected tab."
+  },
+  "errStart": {
+    "message": "The conversion could not start."
+  },
+  "errFailed": {
+    "message": "The conversion failed."
+  },
+  "errEmpty": {
+    "message": "Nothing to capture: the area is empty or outside the page."
+  },
+  "errCancelled": {
+    "message": "Capture cancelled"
+  },
+  "warnTruncatedPage": {
+    "message": "Page cut at $1 px high (“Maximum height” setting)."
+  },
+  "warnTruncatedContent": {
+    "message": "Content cut at $1 px high (“Maximum height” setting)."
+  },
+  "warnSheets": {
+    "message": "$1 style sheet(s) from another domain could not be adapted to the screen."
+  },
+  "notifDoneTitle": {
+    "message": "PDF created"
+  },
+  "notifDoneOne": {
+    "message": "$1 — 1 page, $2"
+  },
+  "notifDoneMany": {
+    "message": "$1 — $2 pages, $3"
+  },
+  "notifErrorTitle": {
+    "message": "Conversion failed"
+  },
+  "unitMB": {
+    "message": "$1 MB"
+  },
+  "unitKB": {
+    "message": "$1 KB"
+  },
+  "pickHint": {
+    "message": "Click the element to convert  ·  ↑ parent  ↓ child  ·  Enter confirm  ·  Esc cancel"
+  },
+  "regionHint": {
+    "message": "Draw the area to convert (the mouse wheel scrolls)  ·  Esc cancel"
+  },
+  "cleanupHint": {
+    "message": "Click the elements to remove  ·  Ctrl+Z restore  ·  Enter capture  ·  Esc cancel"
+  },
+  "cleanupHintCount": {
+    "message": "$1 element(s) removed  ·  Ctrl+Z restore  ·  Enter capture  ·  Esc cancel"
+  },
+  "btnConfirm": {
+    "message": "Confirm"
+  },
+  "btnCancel": {
+    "message": "Cancel"
+  },
+  "btnRestore": {
+    "message": "Restore"
+  },
+  "btnCapture": {
+    "message": "Capture"
+  },
+  "popupScope": {
+    "message": "Area"
+  },
+  "scopeFull": {
+    "message": "Whole page"
+  },
+  "scopeVisible": {
+    "message": "Visible"
+  },
+  "scopeElement": {
+    "message": "Element"
+  },
+  "scopeRegion": {
+    "message": "Region"
+  },
+  "popupFormat": {
+    "message": "Format"
+  },
+  "fmtSingle": {
+    "message": "Single page (no breaks)"
+  },
+  "fmtA4": {
+    "message": "A4"
+  },
+  "fmtA3": {
+    "message": "A3"
+  },
+  "fmtA5": {
+    "message": "A5"
+  },
+  "fmtLetter": {
+    "message": "US Letter"
+  },
+  "fmtLegal": {
+    "message": "US Legal"
+  },
+  "fmtTabloid": {
+    "message": "Tabloid"
+  },
+  "fmtScreen": {
+    "message": "Screen (one page per screen)"
+  },
+  "fmtCustomMenu": {
+    "message": "Custom…"
+  },
+  "fmtCustom": {
+    "message": "Custom"
+  },
+  "orientPortrait": {
+    "message": "Portrait"
+  },
+  "orientLandscape": {
+    "message": "Landscape"
+  },
+  "popupSharpness": {
+    "message": "Sharpness"
+  },
+  "ratioScreen": {
+    "message": "Screen"
+  },
+  "ratioScreenTitle": {
+    "message": "Your screen’s resolution"
+  },
+  "popupMore": {
+    "message": "Engine and quick options"
+  },
+  "engineExact": {
+    "message": "Exact, pixel for pixel"
+  },
+  "engineVector": {
+    "message": "Vector (printing)"
+  },
+  "engineHintExact": {
+    "message": "The browser’s rendering is captured as is: identical to the screen, with selectable text, links and bookmarks."
+  },
+  "engineHintVector": {
+    "message": "Uses the print engine: vector text and a light file, but the layout may differ from the screen."
+  },
+  "optHideFixed": {
+    "message": "Hide fixed elements (banners, chat…)"
+  },
+  "optCleanup": {
+    "message": "Remove elements before capturing"
+  },
+  "optHeaderFooter": {
+    "message": "Header and footer (title, address, date, page no.)"
+  },
+  "optSaveAs": {
+    "message": "Choose where to save the file"
+  },
+  "btnConvert": {
+    "message": "Convert to PDF"
+  },
+  "kbdEnter": {
+    "message": "Enter"
+  },
+  "statusDefault": {
+    "message": "Converting…"
+  },
+  "hintScroll": {
+    "message": "The page scrolls by itself during the capture: let it work. Esc to stop."
+  },
+  "hintPrint": {
+    "message": "Choose where to save the file in the save dialog."
+  },
+  "hintPaused": {
+    "message": "The capture will resume as soon as the tab is shown again."
+  },
+  "hintPick": {
+    "message": "Make your selection directly in the page."
+  },
+  "hintBuild": {
+    "message": "The page is already back to normal; the PDF is being written."
+  },
+  "resultReadyOne": {
+    "message": "PDF ready — 1 page, $1"
+  },
+  "resultReadyMany": {
+    "message": "PDF ready — $1 pages, $2"
+  },
+  "resultVector": {
+    "message": "PDF saved (vector engine)"
+  },
+  "resultSaveCancelled": {
+    "message": "Saving cancelled"
+  },
+  "btnOpenPdf": {
+    "message": "Open PDF"
+  },
+  "btnShowPdf": {
+    "message": "Show in folder"
+  },
+  "allSettings": {
+    "message": "All settings"
+  },
+  "optPageTitle": {
+    "message": "Settings — Web2PDF Exact"
+  },
+  "optIntro": {
+    "message": "Every setting is saved as soon as it changes and becomes the default for the popup, the right-click menu and the keyboard shortcuts."
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "tocEngine": {
+    "message": "Engine"
+  },
+  "tocCapture": {
+    "message": "Capture"
+  },
+  "tocQuality": {
+    "message": "Quality"
+  },
+  "tocLayout": {
+    "message": "Layout"
+  },
+  "tocContent": {
+    "message": "PDF content"
+  },
+  "tocFile": {
+    "message": "File"
+  },
+  "tocVector": {
+    "message": "Vector"
+  },
+  "tocMenus": {
+    "message": "Menu & shortcuts"
+  },
+  "secEngine": {
+    "message": "Rendering engine"
+  },
+  "engExactTitle": {
+    "message": "Exact, pixel for pixel"
+  },
+  "tagRecommended": {
+    "message": "recommended"
+  },
+  "engExactDesc": {
+    "message": "The browser draws the page with its own engine and that image goes into the PDF: CSS, fonts, canvas, videos and iframes come out exactly as on screen. An invisible text layer keeps the text selectable and searchable; links and bookmarks stay active."
+  },
+  "engVectorTitle": {
+    "message": "Vector, via printing"
+  },
+  "engVectorDesc": {
+    "message": "Uses the browser’s “Save to PDF” after forcing screen styles. Vector text and a very light file, but some sites change their layout when printed. A dialog asks where to save."
+  },
+  "secCapture": {
+    "message": "Capture"
+  },
+  "fldScope": {
+    "message": "Default area"
+  },
+  "optScopeFull": {
+    "message": "Whole page"
+  },
+  "optScopeVisible": {
+    "message": "Visible area"
+  },
+  "optScopeElement": {
+    "message": "Picked element"
+  },
+  "optScopeRegion": {
+    "message": "Drawn area"
+  },
+  "fldMethod": {
+    "message": "Method"
+  },
+  "methodAuto": {
+    "message": "Automatic (recommended)"
+  },
+  "methodScroll": {
+    "message": "Scrolling: slice by slice"
+  },
+  "methodDirect": {
+    "message": "Direct rendering, no scrolling"
+  },
+  "methodHelp": {
+    "message": "Scrolling triggers deferred images, reveal animations and virtual lists. Direct rendering is instant and avoids seams on parallax effects."
+  },
+  "fldFloating": {
+    "message": "Fixed elements (sticky header, chat, banner…)"
+  },
+  "floatingOnce": {
+    "message": "Shown once, at the top"
+  },
+  "floatingHide": {
+    "message": "Hidden"
+  },
+  "fldSettle": {
+    "message": "Maximum wait after each scroll"
+  },
+  "settleHelp": {
+    "message": "The capture moves on as soon as the page is stable; raise it for slow or heavily animated sites."
+  },
+  "fldStartDelay": {
+    "message": "Delay before capture"
+  },
+  "startDelayHelp": {
+    "message": "Time to open a menu or hover an element you want frozen in the PDF."
+  },
+  "fldMaxHeight": {
+    "message": "Maximum height"
+  },
+  "maxHeightHelp": {
+    "message": "Safety net for infinite-scroll pages."
+  },
+  "unitMs": {
+    "message": "ms"
+  },
+  "unitS": {
+    "message": "s"
+  },
+  "unitPx": {
+    "message": "px"
+  },
+  "unitMm": {
+    "message": "mm"
+  },
+  "chkPreload": {
+    "message": "Preload the whole page before capturing (deferred images, content loaded on scroll)"
+  },
+  "chkFreeze": {
+    "message": "Finish transitions and animations instantly (no half-revealed elements)"
+  },
+  "chkContainer": {
+    "message": "Unroll the scrolling panel of web apps (chats, documents, dashboards)"
+  },
+  "chkOverflow": {
+    "message": "Include horizontal overflow (pages wider than the screen)"
+  },
+  "chkCleanup": {
+    "message": "Always offer to remove elements before capturing"
+  },
+  "secQuality": {
+    "message": "Image quality"
+  },
+  "fldRatio": {
+    "message": "Sharpness (pixels per CSS pixel)"
+  },
+  "ratio0": {
+    "message": "Your screen’s"
+  },
+  "ratio1": {
+    "message": "×1 — light file"
+  },
+  "ratio15": {
+    "message": "×1.5"
+  },
+  "ratio2": {
+    "message": "×2 — sharp when printed"
+  },
+  "ratio3": {
+    "message": "×3 — very sharp"
+  },
+  "ratio4": {
+    "message": "×4 — extreme zoom"
+  },
+  "ratioHelp": {
+    "message": "“Your screen’s” reproduces exactly what you see (×2 on a Retina display)."
+  },
+  "fldCompression": {
+    "message": "Compression"
+  },
+  "compAuto": {
+    "message": "Automatic"
+  },
+  "compLossless": {
+    "message": "Always lossless"
+  },
+  "compJpeg": {
+    "message": "Always JPEG"
+  },
+  "compHelp": {
+    "message": "Automatic: lossless for text and flat colours, JPEG for photos."
+  },
+  "fldJpegQuality": {
+    "message": "JPEG quality:"
+  },
+  "jpegHelp": {
+    "message": "From 90 up, colours are not subsampled."
+  },
+  "secLayout": {
+    "message": "Layout"
+  },
+  "fldFormat": {
+    "message": "Format"
+  },
+  "fldOrientation": {
+    "message": "Orientation"
+  },
+  "fldCustomW": {
+    "message": "Custom width"
+  },
+  "fldCustomH": {
+    "message": "Custom height"
+  },
+  "fldFit": {
+    "message": "Scale on paper"
+  },
+  "fitWidth": {
+    "message": "Fit to page width"
+  },
+  "fitActual": {
+    "message": "Actual size (96 dpi)"
+  },
+  "fldMarginColor": {
+    "message": "Margin colour"
+  },
+  "marginPage": {
+    "message": "Page background colour"
+  },
+  "marginWhite": {
+    "message": "White"
+  },
+  "legendMargins": {
+    "message": "Margins (mm)"
+  },
+  "marginTop": {
+    "message": "Top"
+  },
+  "marginRight": {
+    "message": "Right"
+  },
+  "marginBottom": {
+    "message": "Bottom"
+  },
+  "marginLeft": {
+    "message": "Left"
+  },
+  "chkSmartBreaks": {
+    "message": "Smart page breaks: never cut a line of text or an image between two pages"
+  },
+  "chkLimitSize": {
+    "message": "Single page: stay under 200 inches (Acrobat compatibility; the image keeps its full resolution)"
+  },
+  "chkHeaderFooter": {
+    "message": "Header (title, address) and footer (date, page number)"
+  },
+  "secContent": {
+    "message": "PDF content"
+  },
+  "chkTextLayer": {
+    "message": "Selectable, copyable and searchable text (invisible layer aligned with the image)"
+  },
+  "chkLinks": {
+    "message": "Clickable links, including the page’s internal anchors"
+  },
+  "chkBookmarks": {
+    "message": "Bookmarks generated from the page’s headings"
+  },
+  "secFile": {
+    "message": "File"
+  },
+  "fldFilename": {
+    "message": "File name"
+  },
+  "filenameHelp": {
+    "message": "Variables: <code>{title}</code> <code>{domain}</code> <code>{host}</code> <code>{path}</code> <code>{date}</code> <code>{time}</code> <code>{datetime}</code>. Use “/” to file PDFs into subfolders of the download folder, for example <code>Web2PDF/{domain}/{date} {title}</code>."
+  },
+  "previewLabel": {
+    "message": "Preview:"
+  },
+  "previewTitle": {
+    "message": "Page title"
+  },
+  "fldAfter": {
+    "message": "After conversion"
+  },
+  "afterDownload": {
+    "message": "Download"
+  },
+  "afterDownloadOpen": {
+    "message": "Download and open in a tab"
+  },
+  "afterOpen": {
+    "message": "Open only (preview, save it yourself)"
+  },
+  "chkSaveAs": {
+    "message": "Ask where to save each file"
+  },
+  "chkNotify": {
+    "message": "Notification when done (click it to open the PDF)"
+  },
+  "secVector": {
+    "message": "Vector engine"
+  },
+  "chkEmulateScreen": {
+    "message": "Print with screen styles (neutralises the page’s <code>@media print</code> rules)"
+  },
+  "chkFitWidth": {
+    "message": "Lay out at screen width, then shrink to fit the paper"
+  },
+  "vectorNote": {
+    "message": "Known limits of printing: sections one screen tall (<code>100vh</code>) take the paper’s height, and style sheets from other domains cannot be adapted. The exact engine has none of these limits."
+  },
+  "secMenus": {
+    "message": "Right-click menu and shortcuts"
+  },
+  "fldContextMenu": {
+    "message": "Right-click menu on the page"
+  },
+  "ctxDirect": {
+    "message": "Direct: “Convert page to PDF” in one click"
+  },
+  "ctxFull": {
+    "message": "Full submenu (page, visible area, element, area, vector)"
+  },
+  "ctxHelp": {
+    "message": "Every mode is also available by right-clicking the extension’s toolbar icon."
+  },
+  "shortcutsText": {
+    "message": "<kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> opens the popup. Direct shortcuts also exist (whole page, visible area, element, drawn area): assign them in <strong>about:addons</strong> → gear icon → <strong>Manage Extension Shortcuts</strong>."
+  },
+  "escText": {
+    "message": "During a capture, <kbd>Esc</kbd> stops it and puts the page back exactly as it was."
+  },
+  "btnReset": {
+    "message": "Restore default settings"
+  },
+  "confirmReset": {
+    "message": "Restore all default settings?"
+  },
+  "linkSource": {
+    "message": "Source code"
+  },
+  "linkIssues": {
+    "message": "Report a problem"
+  }
+}

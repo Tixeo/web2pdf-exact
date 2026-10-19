@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <title>Réglages — Web2PDF Exact</title>
+    <title>Web2PDF Exact</title>
     <link rel="icon" href="../icons/icon.svg" />
     <link rel="stylesheet" href="options.css" />
   </head>
@@ -13,251 +13,262 @@
       <img src="../icons/icon.svg" alt="" width="44" height="44" />
       <div>
         <h1>Web2PDF Exact</h1>
-        <p>Chaque réglage est enregistré dès qu’il change et sert de valeur par défaut à la popup, au menu contextuel et aux raccourcis.</p>
+        <p data-i18n="optIntro"></p>
       </div>
       <span class="saved" id="saved" aria-live="polite"></span>
     </header>
 
-    <nav class="toc" aria-label="Sections">
-      <a href="#moteur">Moteur</a>
-      <a href="#capture">Capture</a>
-      <a href="#qualite">Qualité</a>
-      <a href="#page">Mise en page</a>
-      <a href="#contenu">Contenu du PDF</a>
-      <a href="#fichier">Fichier</a>
-      <a href="#vectoriel">Vectoriel</a>
-      <a href="#raccourcis">Raccourcis</a>
+    <nav class="toc">
+      <a href="#moteur" data-i18n="tocEngine"></a>
+      <a href="#capture" data-i18n="tocCapture"></a>
+      <a href="#qualite" data-i18n="tocQuality"></a>
+      <a href="#page" data-i18n="tocLayout"></a>
+      <a href="#contenu" data-i18n="tocContent"></a>
+      <a href="#fichier" data-i18n="tocFile"></a>
+      <a href="#vectoriel" data-i18n="tocVector"></a>
+      <a href="#menus" data-i18n="tocMenus"></a>
     </nav>
 
     <main>
       <section id="moteur" class="card">
-        <h2>Moteur de rendu</h2>
+        <h2 data-i18n="secEngine"></h2>
         <div class="choices">
           <label class="choice">
             <input type="radio" name="engine" value="exact" />
             <span>
-              <strong>Exact, au pixel près</strong> <em class="tag">recommandé</em>
-              <small>Le navigateur dessine la page avec son propre moteur et l’image est placée dans le PDF : CSS, polices, canvas, vidéos et iframes sont reproduits à l’identique. Un calque de texte invisible rend le texte sélectionnable et cherchable ; liens et signets restent actifs.</small>
+              <strong data-i18n="engExactTitle"></strong> <em class="tag" data-i18n="tagRecommended"></em>
+              <small data-i18n="engExactDesc"></small>
             </span>
           </label>
           <label class="choice">
             <input type="radio" name="engine" value="vector" />
             <span>
-              <strong>Vectoriel, via l’impression</strong>
-              <small>Utilise « Enregistrer en PDF » du navigateur après avoir forcé les styles d’écran. Texte vectoriel et fichier très léger, mais certains sites changent de mise en page à l’impression. Une boîte de dialogue demande où enregistrer.</small>
+              <strong data-i18n="engVectorTitle"></strong>
+              <small data-i18n="engVectorDesc"></small>
             </span>
           </label>
         </div>
       </section>
 
       <section id="capture" class="card">
-        <h2>Capture</h2>
+        <h2 data-i18n="secCapture"></h2>
         <div class="grid">
           <label class="field">
-            <span>Zone par défaut</span>
+            <span data-i18n="fldScope"></span>
             <select name="scope">
-              <option value="full">Page entière</option>
-              <option value="visible">Zone visible</option>
-              <option value="element">Élément choisi</option>
-              <option value="region">Zone tracée</option>
+              <option value="full" data-i18n="optScopeFull"></option>
+              <option value="visible" data-i18n="optScopeVisible"></option>
+              <option value="element" data-i18n="optScopeElement"></option>
+              <option value="region" data-i18n="optScopeRegion"></option>
             </select>
           </label>
           <label class="field">
-            <span>Méthode</span>
+            <span data-i18n="fldMethod"></span>
             <select name="captureMethod">
-              <option value="auto">Automatique (recommandé)</option>
-              <option value="scroll">Défilement : tranche par tranche</option>
-              <option value="direct">Rendu direct, sans défilement</option>
+              <option value="auto" data-i18n="methodAuto"></option>
+              <option value="scroll" data-i18n="methodScroll"></option>
+              <option value="direct" data-i18n="methodDirect"></option>
             </select>
-            <small>Le défilement déclenche les images différées, les animations d’apparition et les listes virtuelles. Le rendu direct est instantané et évite les raccords sur les effets de parallaxe.</small>
+            <small data-i18n="methodHelp"></small>
           </label>
           <label class="field">
-            <span>Éléments fixes (en-tête collant, chat, bandeau…)</span>
+            <span data-i18n="fldFloating"></span>
             <select name="floating">
-              <option value="once">Affichés une seule fois, en haut</option>
-              <option value="hide">Masqués</option>
+              <option value="once" data-i18n="floatingOnce"></option>
+              <option value="hide" data-i18n="floatingHide"></option>
             </select>
           </label>
           <label class="field">
-            <span>Attente maximale après chaque défilement</span>
-            <span class="unit"><input type="number" name="settleDelay" min="0" max="5000" step="50" /> ms</span>
-            <small>La capture repart dès que la page est stable ; à augmenter pour les sites lents ou très animés.</small>
+            <span data-i18n="fldSettle"></span>
+            <span class="unit"><input type="number" name="settleDelay" min="0" max="5000" step="50" /> <span data-i18n="unitMs"></span></span>
+            <small data-i18n="settleHelp"></small>
           </label>
           <label class="field">
-            <span>Délai avant capture</span>
-            <span class="unit"><input type="number" name="startDelay" min="0" max="60" step="1" /> s</span>
-            <small>Le temps d’ouvrir un menu ou de survoler un élément à figer.</small>
+            <span data-i18n="fldStartDelay"></span>
+            <span class="unit"><input type="number" name="startDelay" min="0" max="60" step="1" /> <span data-i18n="unitS"></span></span>
+            <small data-i18n="startDelayHelp"></small>
           </label>
           <label class="field">
-            <span>Hauteur maximale</span>
-            <span class="unit"><input type="number" name="maxHeight" min="1000" max="500000" step="1000" /> px</span>
-            <small>Garde-fou pour les pages à défilement infini.</small>
+            <span data-i18n="fldMaxHeight"></span>
+            <span class="unit"><input type="number" name="maxHeight" min="1000" max="500000" step="1000" /> <span data-i18n="unitPx"></span></span>
+            <small data-i18n="maxHeightHelp"></small>
           </label>
         </div>
         <div class="checks">
-          <label class="check"><input type="checkbox" name="preloadLazy" /> Précharger toute la page avant la capture (images différées, contenus chargés au défilement)</label>
-          <label class="check"><input type="checkbox" name="freezeAnimations" /> Terminer instantanément transitions et animations (pas d’éléments à moitié apparus)</label>
-          <label class="check"><input type="checkbox" name="scrollContainer" /> Dérouler le conteneur défilant des applications web (messageries, documents, tableaux de bord)</label>
-          <label class="check"><input type="checkbox" name="horizontalOverflow" /> Inclure le débordement horizontal (pages plus larges que l’écran)</label>
-          <label class="check"><input type="checkbox" name="cleanupBefore" /> Toujours proposer de retirer des éléments avant la capture</label>
+          <label class="check"><input type="checkbox" name="preloadLazy" /> <span data-i18n="chkPreload"></span></label>
+          <label class="check"><input type="checkbox" name="freezeAnimations" /> <span data-i18n="chkFreeze"></span></label>
+          <label class="check"><input type="checkbox" name="scrollContainer" /> <span data-i18n="chkContainer"></span></label>
+          <label class="check"><input type="checkbox" name="horizontalOverflow" /> <span data-i18n="chkOverflow"></span></label>
+          <label class="check"><input type="checkbox" name="cleanupBefore" /> <span data-i18n="chkCleanup"></span></label>
         </div>
       </section>
 
       <section id="qualite" class="card">
-        <h2>Qualité d’image</h2>
+        <h2 data-i18n="secQuality"></h2>
         <div class="grid">
           <label class="field">
-            <span>Netteté (pixels par pixel CSS)</span>
+            <span data-i18n="fldRatio"></span>
             <select name="pixelRatio">
-              <option value="0">Celle de l’écran</option>
-              <option value="1">×1 — fichier léger</option>
-              <option value="1.5">×1,5</option>
-              <option value="2">×2 — net à l’impression</option>
-              <option value="3">×3 — très net</option>
-              <option value="4">×4 — zoom extrême</option>
+              <option value="0" data-i18n="ratio0"></option>
+              <option value="1" data-i18n="ratio1"></option>
+              <option value="1.5" data-i18n="ratio15"></option>
+              <option value="2" data-i18n="ratio2"></option>
+              <option value="3" data-i18n="ratio3"></option>
+              <option value="4" data-i18n="ratio4"></option>
             </select>
-            <small>« Celle de l’écran » reproduit exactement ce que vous voyez (×2 sur un écran Retina).</small>
+            <small data-i18n="ratioHelp"></small>
           </label>
           <label class="field">
-            <span>Compression</span>
+            <span data-i18n="fldCompression"></span>
             <select name="imageFormat">
-              <option value="auto">Automatique</option>
-              <option value="lossless">Toujours sans perte</option>
-              <option value="jpeg">Toujours JPEG</option>
+              <option value="auto" data-i18n="compAuto"></option>
+              <option value="lossless" data-i18n="compLossless"></option>
+              <option value="jpeg" data-i18n="compJpeg"></option>
             </select>
-            <small>Automatique : sans perte pour le texte et les aplats, JPEG pour les photos.</small>
+            <small data-i18n="compHelp"></small>
           </label>
           <label class="field">
-            <span>Qualité JPEG : <output id="jpegQualityOut"></output></span>
+            <span><span data-i18n="fldJpegQuality"></span> <output id="jpegQualityOut"></output></span>
             <input type="range" name="jpegQuality" min="50" max="100" step="1" />
-            <small>À partir de 90, les couleurs ne sont pas sous-échantillonnées.</small>
+            <small data-i18n="jpegHelp"></small>
           </label>
         </div>
       </section>
 
       <section id="page" class="card">
-        <h2>Mise en page</h2>
+        <h2 data-i18n="secLayout"></h2>
         <div class="grid">
           <label class="field">
-            <span>Format</span>
+            <span data-i18n="fldFormat"></span>
             <select name="pageFormat">
-              <option value="single">Page unique (sans coupure)</option>
-              <option value="a4">A4</option>
-              <option value="a3">A3</option>
-              <option value="a5">A5</option>
-              <option value="letter">Lettre US</option>
-              <option value="legal">Légal US</option>
-              <option value="tabloid">Tabloïd</option>
-              <option value="screen">Écran (une page par écran)</option>
-              <option value="custom">Personnalisé</option>
+              <option value="single" data-i18n="fmtSingle"></option>
+              <option value="a4" data-i18n="fmtA4"></option>
+              <option value="a3" data-i18n="fmtA3"></option>
+              <option value="a5" data-i18n="fmtA5"></option>
+              <option value="letter" data-i18n="fmtLetter"></option>
+              <option value="legal" data-i18n="fmtLegal"></option>
+              <option value="tabloid" data-i18n="fmtTabloid"></option>
+              <option value="screen" data-i18n="fmtScreen"></option>
+              <option value="custom" data-i18n="fmtCustom"></option>
             </select>
           </label>
           <label class="field">
-            <span>Orientation</span>
+            <span data-i18n="fldOrientation"></span>
             <select name="orientation">
-              <option value="portrait">Portrait</option>
-              <option value="landscape">Paysage</option>
+              <option value="portrait" data-i18n="orientPortrait"></option>
+              <option value="landscape" data-i18n="orientLandscape"></option>
             </select>
           </label>
           <label class="field" data-show="custom">
-            <span>Largeur personnalisée</span>
-            <span class="unit"><input type="number" name="customWidthMm" min="20" max="5000" step="1" /> mm</span>
+            <span data-i18n="fldCustomW"></span>
+            <span class="unit"><input type="number" name="customWidthMm" min="20" max="5000" step="1" /> <span data-i18n="unitMm"></span></span>
           </label>
           <label class="field" data-show="custom">
-            <span>Hauteur personnalisée</span>
-            <span class="unit"><input type="number" name="customHeightMm" min="20" max="5000" step="1" /> mm</span>
+            <span data-i18n="fldCustomH"></span>
+            <span class="unit"><input type="number" name="customHeightMm" min="20" max="5000" step="1" /> <span data-i18n="unitMm"></span></span>
           </label>
           <label class="field">
-            <span>Échelle sur le papier</span>
+            <span data-i18n="fldFit"></span>
             <select name="fit">
-              <option value="width">Ajuster à la largeur de la page</option>
-              <option value="actual">Taille réelle (96 ppp)</option>
+              <option value="width" data-i18n="fitWidth"></option>
+              <option value="actual" data-i18n="fitActual"></option>
             </select>
           </label>
           <label class="field">
-            <span>Couleur des marges</span>
+            <span data-i18n="fldMarginColor"></span>
             <select name="marginColor">
-              <option value="page">Couleur de fond de la page</option>
-              <option value="white">Blanc</option>
+              <option value="page" data-i18n="marginPage"></option>
+              <option value="white" data-i18n="marginWhite"></option>
             </select>
           </label>
         </div>
         <fieldset class="margins">
-          <legend>Marges (mm)</legend>
-          <label>Haut <input type="number" name="marginTop" min="0" max="100" step="1" /></label>
-          <label>Droite <input type="number" name="marginRight" min="0" max="100" step="1" /></label>
-          <label>Bas <input type="number" name="marginBottom" min="0" max="100" step="1" /></label>
-          <label>Gauche <input type="number" name="marginLeft" min="0" max="100" step="1" /></label>
+          <legend data-i18n="legendMargins"></legend>
+          <label><span data-i18n="marginTop"></span> <input type="number" name="marginTop" min="0" max="100" step="1" /></label>
+          <label><span data-i18n="marginRight"></span> <input type="number" name="marginRight" min="0" max="100" step="1" /></label>
+          <label><span data-i18n="marginBottom"></span> <input type="number" name="marginBottom" min="0" max="100" step="1" /></label>
+          <label><span data-i18n="marginLeft"></span> <input type="number" name="marginLeft" min="0" max="100" step="1" /></label>
         </fieldset>
         <div class="checks">
-          <label class="check"><input type="checkbox" name="smartBreaks" /> Coupures intelligentes : ne jamais trancher une ligne de texte ou une image entre deux pages</label>
-          <label class="check"><input type="checkbox" name="limitPageSize" /> Page unique : rester sous 200 pouces (compatibilité Acrobat ; l’image garde sa pleine résolution)</label>
-          <label class="check"><input type="checkbox" name="headerFooter" /> En-tête (titre, adresse) et pied de page (date, numéro de page)</label>
+          <label class="check"><input type="checkbox" name="smartBreaks" /> <span data-i18n="chkSmartBreaks"></span></label>
+          <label class="check"><input type="checkbox" name="limitPageSize" /> <span data-i18n="chkLimitSize"></span></label>
+          <label class="check"><input type="checkbox" name="headerFooter" /> <span data-i18n="chkHeaderFooter"></span></label>
         </div>
       </section>
 
       <section id="contenu" class="card">
-        <h2>Contenu du PDF</h2>
+        <h2 data-i18n="secContent"></h2>
         <div class="checks">
-          <label class="check"><input type="checkbox" name="textLayer" /> Texte sélectionnable, copiable et cherchable (calque invisible aligné sur l’image)</label>
-          <label class="check"><input type="checkbox" name="links" /> Liens cliquables, y compris les ancres internes de la page</label>
-          <label class="check"><input type="checkbox" name="bookmarks" /> Signets générés à partir des titres de la page</label>
+          <label class="check"><input type="checkbox" name="textLayer" /> <span data-i18n="chkTextLayer"></span></label>
+          <label class="check"><input type="checkbox" name="links" /> <span data-i18n="chkLinks"></span></label>
+          <label class="check"><input type="checkbox" name="bookmarks" /> <span data-i18n="chkBookmarks"></span></label>
         </div>
       </section>
 
       <section id="fichier" class="card">
-        <h2>Fichier</h2>
+        <h2 data-i18n="secFile"></h2>
         <div class="grid">
           <label class="field wide">
-            <span>Nom du fichier</span>
+            <span data-i18n="fldFilename"></span>
             <input type="text" name="filenameTemplate" spellcheck="false" />
-            <small>
-              Variables : <code>{title}</code> <code>{domain}</code> <code>{host}</code> <code>{path}</code>
-              <code>{date}</code> <code>{time}</code> <code>{datetime}</code>. Utilisez « / » pour ranger dans des
-              sous-dossiers du dossier de téléchargement, par exemple <code>Web2PDF/{domain}/{date} {title}</code>.
-            </small>
-            <small class="preview">Aperçu : <span id="filenamePreview"></span></small>
+            <small data-i18n="filenameHelp"></small>
+            <small class="preview"><span data-i18n="previewLabel"></span> <span id="filenamePreview"></span></small>
           </label>
           <label class="field">
-            <span>Après la conversion</span>
+            <span data-i18n="fldAfter"></span>
             <select name="afterAction">
-              <option value="download">Télécharger</option>
-              <option value="download-open">Télécharger et ouvrir dans un onglet</option>
-              <option value="open">Ouvrir seulement (aperçu, à enregistrer soi-même)</option>
+              <option value="download" data-i18n="afterDownload"></option>
+              <option value="download-open" data-i18n="afterDownloadOpen"></option>
+              <option value="open" data-i18n="afterOpen"></option>
             </select>
           </label>
         </div>
         <div class="checks">
-          <label class="check"><input type="checkbox" name="saveAs" /> Demander où enregistrer chaque fichier</label>
-          <label class="check"><input type="checkbox" name="notify" /> Notification à la fin (cliquer dessus ouvre le PDF)</label>
+          <label class="check"><input type="checkbox" name="saveAs" /> <span data-i18n="chkSaveAs"></span></label>
+          <label class="check"><input type="checkbox" name="notify" /> <span data-i18n="chkNotify"></span></label>
         </div>
       </section>
 
       <section id="vectoriel" class="card">
-        <h2>Moteur vectoriel</h2>
+        <h2 data-i18n="secVector"></h2>
         <div class="checks">
-          <label class="check"><input type="checkbox" name="vectorEmulateScreen" /> Imprimer avec les styles d’écran (neutralise les règles <code>@media print</code> de la page)</label>
-          <label class="check"><input type="checkbox" name="vectorFitWidth" /> Mettre en page à la largeur de l’écran puis réduire pour tenir sur le papier</label>
+          <label class="check"><input type="checkbox" name="vectorEmulateScreen" /> <span data-i18n="chkEmulateScreen"></span></label>
+          <label class="check"><input type="checkbox" name="vectorFitWidth" /> <span data-i18n="chkFitWidth"></span></label>
         </div>
-        <p class="note">Limites connues de l’impression : les sections hautes d’un écran (<code>100vh</code>) prennent la hauteur du papier, et les feuilles de style d’autres domaines ne peuvent pas être adaptées. Le moteur exact n’a aucune de ces limites.</p>
+        <p class="note" data-i18n="vectorNote"></p>
       </section>
 
-      <section id="raccourcis" class="card">
-        <h2>Raccourcis clavier</h2>
-        <p><kbd>Alt</kbd> + <kbd>Maj</kbd> + <kbd>P</kbd> ouvre la popup. Des raccourcis directs existent aussi (page entière, zone visible, élément, zone tracée) : attribuez-les dans <strong>about:addons</strong> → roue dentée → <strong>Gérer les raccourcis d’extensions</strong>.</p>
-        <p>Pendant une capture, <kbd>Échap</kbd> l’interrompt et remet la page dans son état d’origine.</p>
+      <section id="menus" class="card">
+        <h2 data-i18n="secMenus"></h2>
+        <div class="grid">
+          <label class="field wide">
+            <span data-i18n="fldContextMenu"></span>
+            <select name="contextMenu">
+              <option value="direct" data-i18n="ctxDirect"></option>
+              <option value="full" data-i18n="ctxFull"></option>
+            </select>
+            <small data-i18n="ctxHelp"></small>
+          </label>
+        </div>
+        <p data-i18n="shortcutsText"></p>
+        <p data-i18n="escText"></p>
       </section>
 
       <div class="actions">
-        <button type="button" id="reset">Rétablir les réglages par défaut</button>
+        <button type="button" id="reset" data-i18n="btnReset"></button>
       </div>
     </main>
 
     <footer>
-      <span>Web2PDF Exact <span id="version"></span></span>
-      <span class="credit">Conçu avec l’aide des ressources de Wheeloh</span>
+      <span>
+        Web2PDF Exact <span id="version"></span> ·
+        <a href="https://github.com/Tixeo/web2pdf-exact" target="_blank" rel="noopener" data-i18n="linkSource"></a> ·
+        <a href="https://github.com/Tixeo/web2pdf-exact/issues" target="_blank" rel="noopener" data-i18n="linkIssues"></a>
+      </span>
+      <span class="credit" data-i18n="credit"></span>
     </footer>
 
+    <script src="../lib/i18n.js"></script>
     <script src="../lib/settings.js"></script>
     <script src="../lib/filename.js"></script>
     <script src="options.js"></script>

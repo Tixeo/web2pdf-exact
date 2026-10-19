@@ -36,7 +36,7 @@ def build_extension(dest):
     if dest.exists():
         shutil.rmtree(dest)
     dest.mkdir(parents=True)
-    for item in ["manifest.json", "background", "content", "lib", "popup", "options", "icons"]:
+    for item in ["manifest.json", "_locales", "background", "content", "lib", "popup", "options", "icons"]:
         src = ROOT / item
         if src.is_dir():
             shutil.copytree(src, dest / item)

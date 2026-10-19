@@ -1,0 +1,674 @@
+{
+  "extName": {
+    "message": "Web2PDF Exact"
+  },
+  "extDescription": {
+    "message": "Convertit la page affichée en PDF identique à l’écran : rendu natif du navigateur, sans rechargement, texte sélectionnable, liens et signets."
+  },
+  "actionTitle": {
+    "message": "Web2PDF Exact — convertir la page en PDF"
+  },
+  "cmdOpen": {
+    "message": "Ouvrir Web2PDF Exact"
+  },
+  "cmdFull": {
+    "message": "Convertir la page entière en PDF (réglages par défaut)"
+  },
+  "cmdVisible": {
+    "message": "Convertir la zone visible en PDF"
+  },
+  "cmdElement": {
+    "message": "Choisir un élément à convertir en PDF"
+  },
+  "cmdRegion": {
+    "message": "Tracer une zone à convertir en PDF"
+  },
+  "credit": {
+    "message": "Conçu avec l’aide des ressources de Wheeloh"
+  },
+  "pdfProducer": {
+    "message": "Web2PDF Exact — Conçu avec l’aide des ressources de Wheeloh"
+  },
+  "pdfUntitled": {
+    "message": "Page web"
+  },
+  "menuConvertPage": {
+    "message": "Convertir la page en PDF"
+  },
+  "menuFull": {
+    "message": "Page entière en PDF"
+  },
+  "menuVisible": {
+    "message": "Zone visible en PDF"
+  },
+  "menuElement": {
+    "message": "Choisir un élément…"
+  },
+  "menuElementHere": {
+    "message": "Cet élément…"
+  },
+  "menuRegion": {
+    "message": "Tracer une zone…"
+  },
+  "menuVector": {
+    "message": "Page entière (vectoriel, via l’impression)"
+  },
+  "menuSettings": {
+    "message": "Réglages…"
+  },
+  "phaseStart": {
+    "message": "Préparation…"
+  },
+  "phasePick": {
+    "message": "En attente de votre sélection dans la page…"
+  },
+  "phasePrepare": {
+    "message": "Préparation de la page…"
+  },
+  "phasePreload": {
+    "message": "Chargement du contenu différé…"
+  },
+  "phaseCapture": {
+    "message": "Capture de la page…"
+  },
+  "phaseBuild": {
+    "message": "Assemblage du PDF…"
+  },
+  "phaseSave": {
+    "message": "Enregistrement…"
+  },
+  "phasePrint": {
+    "message": "Impression vectorielle…"
+  },
+  "phasePaused": {
+    "message": "En pause : revenez sur l’onglet pour continuer…"
+  },
+  "restrictedBadUrl": {
+    "message": "Adresse de page illisible."
+  },
+  "restrictedReader": {
+    "message": "Le mode lecture est une page interne : les extensions ne peuvent pas la capturer au pixel près. Utilisez le moteur « Vectoriel » ou quittez le mode lecture."
+  },
+  "restrictedInternal": {
+    "message": "Cette page interne du navigateur est protégée : aucune extension ne peut y accéder."
+  },
+  "restrictedHost": {
+    "message": "Le navigateur interdit aux extensions d’accéder à $1."
+  },
+  "noticeReader": {
+    "message": "Mode lecture : seul le moteur « Vectoriel » peut convertir cette vue."
+  },
+  "noticeInternal": {
+    "message": "Page interne du navigateur : les extensions n’y ont pas accès."
+  },
+  "errBusy": {
+    "message": "Une capture est déjà en cours dans cet onglet."
+  },
+  "errInject": {
+    "message": "Impossible d’accéder à cette page ($1). Les pages internes du navigateur et certains sites protégés sont inaccessibles aux extensions."
+  },
+  "errReloaded": {
+    "message": "La page a été rechargée ou fermée pendant la capture."
+  },
+  "errNoResponse": {
+    "message": "La page ne répond plus."
+  },
+  "errCaptureFailed": {
+    "message": "Échec de la capture."
+  },
+  "errNoImage": {
+    "message": "Aucune image n’a pu être capturée."
+  },
+  "errDownload": {
+    "message": "Téléchargement refusé : $1"
+  },
+  "errNoPrint": {
+    "message": "Ce navigateur ne propose pas l’impression PDF aux extensions."
+  },
+  "errPrepare": {
+    "message": "Préparation impossible."
+  },
+  "errNotSaved": {
+    "message": "Le PDF n’a pas pu être enregistré."
+  },
+  "errCaptureRefused": {
+    "message": "Le navigateur a refusé la capture de cette page."
+  },
+  "errCapture": {
+    "message": "Capture impossible : $1"
+  },
+  "errUnexpectedTab": {
+    "message": "Onglet inattendu."
+  },
+  "errStart": {
+    "message": "Impossible de démarrer la conversion."
+  },
+  "errFailed": {
+    "message": "La conversion a échoué."
+  },
+  "errEmpty": {
+    "message": "Rien à capturer : la zone est vide ou hors de la page."
+  },
+  "errCancelled": {
+    "message": "Capture annulée"
+  },
+  "warnTruncatedPage": {
+    "message": "Page tronquée à $1 px de haut (réglage « Hauteur maximale »)."
+  },
+  "warnTruncatedContent": {
+    "message": "Contenu tronqué à $1 px de haut (réglage « Hauteur maximale »)."
+  },
+  "warnSheets": {
+    "message": "$1 feuille(s) de style d’un autre domaine n’ont pas pu être adaptées à l’écran."
+  },
+  "notifDoneTitle": {
+    "message": "PDF créé"
+  },
+  "notifDoneOne": {
+    "message": "$1 — 1 page, $2"
+  },
+  "notifDoneMany": {
+    "message": "$1 — $2 pages, $3"
+  },
+  "notifErrorTitle": {
+    "message": "Conversion impossible"
+  },
+  "unitMB": {
+    "message": "$1 Mo"
+  },
+  "unitKB": {
+    "message": "$1 Ko"
+  },
+  "pickHint": {
+    "message": "Cliquez sur l’élément à convertir  ·  ↑ parent  ↓ enfant  ·  Entrée valider  ·  Échap annuler"
+  },
+  "regionHint": {
+    "message": "Tracez la zone à convertir (la molette fait défiler)  ·  Échap annuler"
+  },
+  "cleanupHint": {
+    "message": "Cliquez sur les éléments à retirer  ·  Ctrl+Z rétablir  ·  Entrée capturer  ·  Échap annuler"
+  },
+  "cleanupHintCount": {
+    "message": "$1 élément(s) retiré(s)  ·  Ctrl+Z rétablir  ·  Entrée capturer  ·  Échap annuler"
+  },
+  "btnConfirm": {
+    "message": "Valider"
+  },
+  "btnCancel": {
+    "message": "Annuler"
+  },
+  "btnRestore": {
+    "message": "Rétablir"
+  },
+  "btnCapture": {
+    "message": "Capturer"
+  },
+  "popupScope": {
+    "message": "Zone"
+  },
+  "scopeFull": {
+    "message": "Page entière"
+  },
+  "scopeVisible": {
+    "message": "Visible"
+  },
+  "scopeElement": {
+    "message": "Élément"
+  },
+  "scopeRegion": {
+    "message": "Zone"
+  },
+  "popupFormat": {
+    "message": "Format"
+  },
+  "fmtSingle": {
+    "message": "Page unique (sans coupure)"
+  },
+  "fmtA4": {
+    "message": "A4"
+  },
+  "fmtA3": {
+    "message": "A3"
+  },
+  "fmtA5": {
+    "message": "A5"
+  },
+  "fmtLetter": {
+    "message": "Lettre US"
+  },
+  "fmtLegal": {
+    "message": "Légal US"
+  },
+  "fmtTabloid": {
+    "message": "Tabloïd"
+  },
+  "fmtScreen": {
+    "message": "Écran (une page par écran)"
+  },
+  "fmtCustomMenu": {
+    "message": "Personnalisé…"
+  },
+  "fmtCustom": {
+    "message": "Personnalisé"
+  },
+  "orientPortrait": {
+    "message": "Portrait"
+  },
+  "orientLandscape": {
+    "message": "Paysage"
+  },
+  "popupSharpness": {
+    "message": "Netteté"
+  },
+  "ratioScreen": {
+    "message": "Écran"
+  },
+  "ratioScreenTitle": {
+    "message": "Résolution de votre écran"
+  },
+  "popupMore": {
+    "message": "Moteur et options rapides"
+  },
+  "engineExact": {
+    "message": "Exact, au pixel près"
+  },
+  "engineVector": {
+    "message": "Vectoriel (impression)"
+  },
+  "engineHintExact": {
+    "message": "Le rendu du navigateur est capturé tel quel : identique à l’écran, avec texte sélectionnable, liens et signets."
+  },
+  "engineHintVector": {
+    "message": "Passe par le moteur d’impression : texte vectoriel et fichier léger, mais la mise en page peut s’écarter de l’écran."
+  },
+  "optHideFixed": {
+    "message": "Masquer les éléments fixes (bandeaux, chat…)"
+  },
+  "optCleanup": {
+    "message": "Retirer des éléments avant la capture"
+  },
+  "optHeaderFooter": {
+    "message": "En-tête et pied de page (titre, adresse, date, n°)"
+  },
+  "optSaveAs": {
+    "message": "Choisir l’emplacement du fichier"
+  },
+  "btnConvert": {
+    "message": "Convertir en PDF"
+  },
+  "kbdEnter": {
+    "message": "Entrée"
+  },
+  "statusDefault": {
+    "message": "Conversion…"
+  },
+  "hintScroll": {
+    "message": "La page défile toute seule pendant la capture : laissez-la faire. Échap pour interrompre."
+  },
+  "hintPrint": {
+    "message": "Choisissez l’emplacement du fichier dans la fenêtre d’enregistrement."
+  },
+  "hintPaused": {
+    "message": "La capture reprendra dès que l’onglet sera de nouveau affiché."
+  },
+  "hintPick": {
+    "message": "Faites votre sélection directement dans la page."
+  },
+  "hintBuild": {
+    "message": "La page est déjà rendue à son état normal ; le PDF est en cours d’écriture."
+  },
+  "resultReadyOne": {
+    "message": "PDF prêt — 1 page, $1"
+  },
+  "resultReadyMany": {
+    "message": "PDF prêt — $1 pages, $2"
+  },
+  "resultVector": {
+    "message": "PDF enregistré (moteur vectoriel)"
+  },
+  "resultSaveCancelled": {
+    "message": "Enregistrement annulé"
+  },
+  "btnOpenPdf": {
+    "message": "Ouvrir le PDF"
+  },
+  "btnShowPdf": {
+    "message": "Afficher dans le dossier"
+  },
+  "allSettings": {
+    "message": "Tous les réglages"
+  },
+  "optPageTitle": {
+    "message": "Réglages — Web2PDF Exact"
+  },
+  "optIntro": {
+    "message": "Chaque réglage est enregistré dès qu’il change et sert de valeur par défaut à la popup, au menu du clic droit et aux raccourcis."
+  },
+  "saved": {
+    "message": "Enregistré"
+  },
+  "tocEngine": {
+    "message": "Moteur"
+  },
+  "tocCapture": {
+    "message": "Capture"
+  },
+  "tocQuality": {
+    "message": "Qualité"
+  },
+  "tocLayout": {
+    "message": "Mise en page"
+  },
+  "tocContent": {
+    "message": "Contenu du PDF"
+  },
+  "tocFile": {
+    "message": "Fichier"
+  },
+  "tocVector": {
+    "message": "Vectoriel"
+  },
+  "tocMenus": {
+    "message": "Clic droit et raccourcis"
+  },
+  "secEngine": {
+    "message": "Moteur de rendu"
+  },
+  "engExactTitle": {
+    "message": "Exact, au pixel près"
+  },
+  "tagRecommended": {
+    "message": "recommandé"
+  },
+  "engExactDesc": {
+    "message": "Le navigateur dessine la page avec son propre moteur et l’image est placée dans le PDF : CSS, polices, canvas, vidéos et iframes sont reproduits à l’identique. Un calque de texte invisible rend le texte sélectionnable et cherchable ; liens et signets restent actifs."
+  },
+  "engVectorTitle": {
+    "message": "Vectoriel, via l’impression"
+  },
+  "engVectorDesc": {
+    "message": "Utilise « Enregistrer en PDF » du navigateur après avoir forcé les styles d’écran. Texte vectoriel et fichier très léger, mais certains sites changent de mise en page à l’impression. Une boîte de dialogue demande où enregistrer."
+  },
+  "secCapture": {
+    "message": "Capture"
+  },
+  "fldScope": {
+    "message": "Zone par défaut"
+  },
+  "optScopeFull": {
+    "message": "Page entière"
+  },
+  "optScopeVisible": {
+    "message": "Zone visible"
+  },
+  "optScopeElement": {
+    "message": "Élément choisi"
+  },
+  "optScopeRegion": {
+    "message": "Zone tracée"
+  },
+  "fldMethod": {
+    "message": "Méthode"
+  },
+  "methodAuto": {
+    "message": "Automatique (recommandé)"
+  },
+  "methodScroll": {
+    "message": "Défilement : tranche par tranche"
+  },
+  "methodDirect": {
+    "message": "Rendu direct, sans défilement"
+  },
+  "methodHelp": {
+    "message": "Le défilement déclenche les images différées, les animations d’apparition et les listes virtuelles. Le rendu direct est instantané et évite les raccords sur les effets de parallaxe."
+  },
+  "fldFloating": {
+    "message": "Éléments fixes (en-tête collant, chat, bandeau…)"
+  },
+  "floatingOnce": {
+    "message": "Affichés une seule fois, en haut"
+  },
+  "floatingHide": {
+    "message": "Masqués"
+  },
+  "fldSettle": {
+    "message": "Attente maximale après chaque défilement"
+  },
+  "settleHelp": {
+    "message": "La capture repart dès que la page est stable ; à augmenter pour les sites lents ou très animés."
+  },
+  "fldStartDelay": {
+    "message": "Délai avant capture"
+  },
+  "startDelayHelp": {
+    "message": "Le temps d’ouvrir un menu ou de survoler un élément à figer."
+  },
+  "fldMaxHeight": {
+    "message": "Hauteur maximale"
+  },
+  "maxHeightHelp": {
+    "message": "Garde-fou pour les pages à défilement infini."
+  },
+  "unitMs": {
+    "message": "ms"
+  },
+  "unitS": {
+    "message": "s"
+  },
+  "unitPx": {
+    "message": "px"
+  },
+  "unitMm": {
+    "message": "mm"
+  },
+  "chkPreload": {
+    "message": "Précharger toute la page avant la capture (images différées, contenus chargés au défilement)"
+  },
+  "chkFreeze": {
+    "message": "Terminer instantanément transitions et animations (pas d’éléments à moitié apparus)"
+  },
+  "chkContainer": {
+    "message": "Dérouler le conteneur défilant des applications web (messageries, documents, tableaux de bord)"
+  },
+  "chkOverflow": {
+    "message": "Inclure le débordement horizontal (pages plus larges que l’écran)"
+  },
+  "chkCleanup": {
+    "message": "Toujours proposer de retirer des éléments avant la capture"
+  },
+  "secQuality": {
+    "message": "Qualité d’image"
+  },
+  "fldRatio": {
+    "message": "Netteté (pixels par pixel CSS)"
+  },
+  "ratio0": {
+    "message": "Celle de l’écran"
+  },
+  "ratio1": {
+    "message": "×1 — fichier léger"
+  },
+  "ratio15": {
+    "message": "×1,5"
+  },
+  "ratio2": {
+    "message": "×2 — net à l’impression"
+  },
+  "ratio3": {
+    "message": "×3 — très net"
+  },
+  "ratio4": {
+    "message": "×4 — zoom extrême"
+  },
+  "ratioHelp": {
+    "message": "« Celle de l’écran » reproduit exactement ce que vous voyez (×2 sur un écran Retina)."
+  },
+  "fldCompression": {
+    "message": "Compression"
+  },
+  "compAuto": {
+    "message": "Automatique"
+  },
+  "compLossless": {
+    "message": "Toujours sans perte"
+  },
+  "compJpeg": {
+    "message": "Toujours JPEG"
+  },
+  "compHelp": {
+    "message": "Automatique : sans perte pour le texte et les aplats, JPEG pour les photos."
+  },
+  "fldJpegQuality": {
+    "message": "Qualité JPEG :"
+  },
+  "jpegHelp": {
+    "message": "À partir de 90, les couleurs ne sont pas sous-échantillonnées."
+  },
+  "secLayout": {
+    "message": "Mise en page"
+  },
+  "fldFormat": {
+    "message": "Format"
+  },
+  "fldOrientation": {
+    "message": "Orientation"
+  },
+  "fldCustomW": {
+    "message": "Largeur personnalisée"
+  },
+  "fldCustomH": {
+    "message": "Hauteur personnalisée"
+  },
+  "fldFit": {
+    "message": "Échelle sur le papier"
+  },
+  "fitWidth": {
+    "message": "Ajuster à la largeur de la page"
+  },
+  "fitActual": {
+    "message": "Taille réelle (96 ppp)"
+  },
+  "fldMarginColor": {
+    "message": "Couleur des marges"
+  },
+  "marginPage": {
+    "message": "Couleur de fond de la page"
+  },
+  "marginWhite": {
+    "message": "Blanc"
+  },
+  "legendMargins": {
+    "message": "Marges (mm)"
+  },
+  "marginTop": {
+    "message": "Haut"
+  },
+  "marginRight": {
+    "message": "Droite"
+  },
+  "marginBottom": {
+    "message": "Bas"
+  },
+  "marginLeft": {
+    "message": "Gauche"
+  },
+  "chkSmartBreaks": {
+    "message": "Coupures intelligentes : ne jamais trancher une ligne de texte ou une image entre deux pages"
+  },
+  "chkLimitSize": {
+    "message": "Page unique : rester sous 200 pouces (compatibilité Acrobat ; l’image garde sa pleine résolution)"
+  },
+  "chkHeaderFooter": {
+    "message": "En-tête (titre, adresse) et pied de page (date, numéro de page)"
+  },
+  "secContent": {
+    "message": "Contenu du PDF"
+  },
+  "chkTextLayer": {
+    "message": "Texte sélectionnable, copiable et cherchable (calque invisible aligné sur l’image)"
+  },
+  "chkLinks": {
+    "message": "Liens cliquables, y compris les ancres internes de la page"
+  },
+  "chkBookmarks": {
+    "message": "Signets générés à partir des titres de la page"
+  },
+  "secFile": {
+    "message": "Fichier"
+  },
+  "fldFilename": {
+    "message": "Nom du fichier"
+  },
+  "filenameHelp": {
+    "message": "Variables : <code>{title}</code> <code>{domain}</code> <code>{host}</code> <code>{path}</code> <code>{date}</code> <code>{time}</code> <code>{datetime}</code>. Utilisez « / » pour ranger dans des sous-dossiers du dossier de téléchargement, par exemple <code>Web2PDF/{domain}/{date} {title}</code>."
+  },
+  "previewLabel": {
+    "message": "Aperçu :"
+  },
+  "previewTitle": {
+    "message": "Titre de la page"
+  },
+  "fldAfter": {
+    "message": "Après la conversion"
+  },
+  "afterDownload": {
+    "message": "Télécharger"
+  },
+  "afterDownloadOpen": {
+    "message": "Télécharger et ouvrir dans un onglet"
+  },
+  "afterOpen": {
+    "message": "Ouvrir seulement (aperçu, à enregistrer soi-même)"
+  },
+  "chkSaveAs": {
+    "message": "Demander où enregistrer chaque fichier"
+  },
+  "chkNotify": {
+    "message": "Notification à la fin (cliquer dessus ouvre le PDF)"
+  },
+  "secVector": {
+    "message": "Moteur vectoriel"
+  },
+  "chkEmulateScreen": {
+    "message": "Imprimer avec les styles d’écran (neutralise les règles <code>@media print</code> de la page)"
+  },
+  "chkFitWidth": {
+    "message": "Mettre en page à la largeur de l’écran puis réduire pour tenir sur le papier"
+  },
+  "vectorNote": {
+    "message": "Limites connues de l’impression : les sections hautes d’un écran (<code>100vh</code>) prennent la hauteur du papier, et les feuilles de style d’autres domaines ne peuvent pas être adaptées. Le moteur exact n’a aucune de ces limites."
+  },
+  "secMenus": {
+    "message": "Clic droit et raccourcis"
+  },
+  "fldContextMenu": {
+    "message": "Menu du clic droit sur la page"
+  },
+  "ctxDirect": {
+    "message": "Direct : « Convertir la page en PDF » en un clic"
+  },
+  "ctxFull": {
+    "message": "Sous-menu complet (page, zone visible, élément, zone, vectoriel)"
+  },
+  "ctxHelp": {
+    "message": "Tous les modes restent accessibles par un clic droit sur l’icône de l’extension."
+  },
+  "shortcutsText": {
+    "message": "<kbd>Alt</kbd> + <kbd>Maj</kbd> + <kbd>P</kbd> ouvre la popup. Des raccourcis directs existent aussi (page entière, zone visible, élément, zone tracée) : attribuez-les dans <strong>about:addons</strong> → roue dentée → <strong>Gérer les raccourcis d’extensions</strong>."
+  },
+  "escText": {
+    "message": "Pendant une capture, <kbd>Échap</kbd> l’interrompt et remet la page dans son état d’origine."
+  },
+  "btnReset": {
+    "message": "Rétablir les réglages par défaut"
+  },
+  "confirmReset": {
+    "message": "Rétablir tous les réglages par défaut ?"
+  },
+  "linkSource": {
+    "message": "Code source"
+  },
+  "linkIssues": {
+    "message": "Signaler un problème"
+  }
+}

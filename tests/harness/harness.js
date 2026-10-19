@@ -5,6 +5,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 window.addEventListener('message', async (e) => {
   const d = e.data;
+  // Modification directe des réglages enregistrés (avant un test de menu, par exemple).
+  if (d && d.type === 'w2p-set-settings') {
+    const { settings } = await browser.storage.local.get('settings');
+    await browser.storage.local.set({ settings: { ...(settings || {}), ...d.patch } });
+    document.body.dataset.settings = JSON.stringify(d.patch);
+    return;
+  }
   if (!d || d.type !== 'w2p-test') return;
   document.body.dataset.state = 'running';
   document.body.dataset.result = '';

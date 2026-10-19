@@ -2,36 +2,27 @@
 // Popup : réglages rapides (mémorisés), lancement et suivi de la conversion.
 
 const $ = (id) => document.getElementById(id);
+const { t } = W2P.i18n;
 let settings = null;
 let tab = null;
 let started = false;
 
-const ENGINE_HINTS = {
-  exact:
-    'Le rendu du navigateur est capturé tel quel : identique à l’écran, avec texte sélectionnable, liens et signets.',
-  vector:
-    'Passe par le moteur d’impression : texte vectoriel et fichier léger, mais la mise en page peut s’écarter de l’écran.',
-};
-
-function pageRestriction(url) {
+// 'reader' : seul le moteur vectoriel convient ; 'internal' : page inaccessible.
+function pageRestriction(tab) {
+  if (tab.isInReaderMode) return { kind: 'reader', message: t('noticeReader') };
+  const url = tab.url;
+  if (!url) return { kind: 'internal', message: t('noticeInternal') };
   let u;
   try {
     u = new URL(url);
   } catch (e) {
-    return 'Adresse de page illisible.';
+    return { kind: 'internal', message: t('restrictedBadUrl') };
   }
-  if (u.protocol === 'about:' && u.pathname === 'reader') {
-    return 'Mode lecture : seul le moteur « Vectoriel » peut convertir cette vue.';
-  }
+  if (u.protocol === 'about:' && u.pathname === 'reader') return { kind: 'reader', message: t('noticeReader') };
   if (!['http:', 'https:', 'file:', 'ftp:'].includes(u.protocol)) {
-    return 'Page interne du navigateur : les extensions n’y ont pas accès.';
+    return { kind: 'internal', message: t('noticeInternal') };
   }
   return null;
-}
-
-function formatBytes(n) {
-  if (n >= 1e6) return `${(n / 1e6).toFixed(1).replace('.', ',')} Mo`;
-  return `${Math.max(1, Math.round(n / 1e3))} Ko`;
 }
 
 async function save(patch) {
@@ -60,7 +51,7 @@ function render() {
     b.disabled = vector && b.dataset.value !== 'full';
   }
   for (const b of document.querySelectorAll('.seg[data-key="pixelRatio"] button')) b.disabled = vector;
-  $('engineHint').textContent = ENGINE_HINTS[settings.engine];
+  $('engineHint').textContent = t(settings.engine === 'vector' ? 'engineHintVector' : 'engineHintExact');
   if (vector) $('more').open = true;
 }
 
@@ -119,7 +110,7 @@ async function go() {
   if (!res || !res.ok) {
     started = false;
     $('go').disabled = false;
-    showError((res && res.error) || 'Impossible de démarrer la conversion.');
+    showError((res && res.error) || t('errStart'));
     return;
   }
   const interactive =
@@ -146,34 +137,27 @@ function showJob(job) {
       fill.classList.add('indeterminate');
       fill.style.width = '';
     }
-    $('statusText').textContent = job.label || 'Conversion…';
-    $('statusHint').textContent =
-      job.phase === 'print'
-        ? 'Choisissez l’emplacement du fichier dans la fenêtre d’enregistrement.'
-        : job.phase === 'paused'
-          ? 'La capture reprendra dès que l’onglet sera de nouveau affiché.'
-        : job.phase === 'pick'
-          ? 'Faites votre sélection directement dans la page.'
-          : job.phase === 'build' || job.phase === 'save'
-            ? 'La page est déjà rendue à son état normal ; le PDF est en cours d’écriture.'
-            : 'La page défile toute seule pendant la capture : laissez-la faire. Échap pour interrompre.';
+    $('statusText').textContent = job.label || t('statusDefault');
+    const hints = { print: 'hintPrint', paused: 'hintPaused', pick: 'hintPick', build: 'hintBuild', save: 'hintBuild' };
+    $('statusHint').textContent = t(hints[job.phase] || 'hintScroll');
     return;
   }
   if (job.state === 'error') {
-    showError(job.error || 'La conversion a échoué.');
+    showError(job.error || t('errFailed'));
     return;
   }
   if (job.state !== 'done' || !job.result) return;
   const r = job.result;
   $('result').hidden = false;
   if (r.vector) {
-    $('resultText').textContent = 'PDF enregistré (moteur vectoriel)';
+    $('resultText').textContent = t('resultVector');
     $('openPdf').hidden = $('showPdf').hidden = true;
   } else if (r.cancelledSave) {
-    $('resultText').textContent = 'Enregistrement annulé';
+    $('resultText').textContent = t('resultSaveCancelled');
     $('openPdf').hidden = $('showPdf').hidden = true;
   } else {
-    $('resultText').textContent = `PDF prêt — ${r.pages} page${r.pages > 1 ? 's' : ''}, ${formatBytes(r.bytes)}`;
+    const size = W2P.i18n.formatBytes(r.bytes);
+    $('resultText').textContent = r.pages > 1 ? t('resultReadyMany', r.pages, size) : t('resultReadyOne', size);
     $('openPdf').hidden = false;
     $('showPdf').hidden = r.downloadId == null;
     $('openPdf').onclick = async () => {
@@ -195,6 +179,7 @@ function showJob(job) {
 }
 
 async function init() {
+  W2P.i18n.apply();
   [tab] = await browser.tabs.query({ active: true, currentWindow: true });
   settings = await W2P.loadSettings();
   bind();
@@ -211,11 +196,11 @@ async function init() {
   }
   $('page').textContent = [host, tab.title].filter(Boolean).join(' — ') || tab.url;
   $('page').title = tab.url;
-  const reason = pageRestriction(tab.url || '');
-  if (reason) {
-    $('notice').textContent = reason;
+  const restriction = pageRestriction(tab);
+  if (restriction) {
+    $('notice').textContent = restriction.message;
     $('notice').hidden = false;
-    if (!/lecture/.test(reason)) $('go').disabled = true;
+    if (restriction.kind !== 'reader') $('go').disabled = true;
   }
   browser.runtime.onMessage.addListener((msg) => {
     if (msg && msg.type === 'w2p:job' && msg.job.tabId === tab.id) showJob(msg.job);

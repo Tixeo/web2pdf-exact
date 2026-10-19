@@ -8,6 +8,7 @@ const blobUrls = []; // URL des derniers PDF (pour les rouvrir)
 let seq = 0;
 
 const COLORS = { run: '#4c6fff', ok: '#16a34a', err: '#dc2626' };
+const t = (key, ...subs) => W2P.t(key, ...subs);
 
 const RESTRICTED_HOSTS = new Set([
   'accounts-static.cdn.mozilla.net',
@@ -24,22 +25,23 @@ const RESTRICTED_HOSTS = new Set([
   'sync.services.mozilla.com',
 ]);
 
-function restrictionReason(url) {
+// { kind: 'reader' | 'internal', message } ou null si la page est accessible.
+// L'adresse des pages internes (dont le mode lecture) est masquée aux extensions.
+function restriction(tab) {
+  if (tab.isInReaderMode) return { kind: 'reader', message: t('restrictedReader') };
+  const url = tab.url;
+  if (!url) return { kind: 'internal', message: t('restrictedInternal') };
   let u;
   try {
     u = new URL(url);
   } catch (e) {
-    return 'Adresse de page illisible.';
+    return { kind: 'internal', message: t('restrictedBadUrl') };
   }
-  if (u.protocol === 'about:' && u.pathname === 'reader') {
-    return 'Le mode lecture est une page interne : les extensions ne peuvent pas la capturer au pixel près. Utilisez le moteur « Vectoriel » ou quittez le mode lecture.';
-  }
+  if (u.protocol === 'about:' && u.pathname === 'reader') return { kind: 'reader', message: t('restrictedReader') };
   if (!['http:', 'https:', 'file:', 'ftp:'].includes(u.protocol)) {
-    return 'Cette page interne du navigateur est protégée : aucune extension ne peut y accéder.';
+    return { kind: 'internal', message: t('restrictedInternal') };
   }
-  if (RESTRICTED_HOSTS.has(u.hostname)) {
-    return `Le navigateur interdit aux extensions d’accéder à ${u.hostname}.`;
-  }
+  if (RESTRICTED_HOSTS.has(u.hostname)) return { kind: 'internal', message: t('restrictedHost', u.hostname) };
   return null;
 }
 
@@ -89,15 +91,15 @@ browser.notifications.onClicked.addListener(async (id) => {
 });
 
 const PHASES = {
-  start: 'Préparation…',
-  pick: 'En attente de votre sélection dans la page…',
-  prepare: 'Préparation de la page…',
-  preload: 'Chargement du contenu différé…',
-  capture: 'Capture de la page…',
-  build: 'Assemblage du PDF…',
-  save: 'Enregistrement…',
-  print: 'Impression vectorielle…',
-  paused: 'En pause : revenez sur l’onglet pour continuer…',
+  start: 'phaseStart',
+  pick: 'phasePick',
+  prepare: 'phasePrepare',
+  preload: 'phasePreload',
+  capture: 'phaseCapture',
+  build: 'phaseBuild',
+  save: 'phaseSave',
+  print: 'phasePrint',
+  paused: 'phasePaused',
 };
 
 function publicJob(job) {
@@ -106,7 +108,7 @@ function publicJob(job) {
     tabId: job.tabId,
     state: job.state,
     phase: job.phase,
-    label: PHASES[job.phase] || '',
+    label: PHASES[job.phase] ? t(PHASES[job.phase]) : '',
     done: job.done || 0,
     total: job.total || 0,
     error: job.error || null,
@@ -133,16 +135,16 @@ function setPhase(job, phase, done = 0, total = 0) {
 // Tâches
 // -----------------------------------------------------------------------------
 
-async function startJob({ tabId, scope, overrides }) {
+async function startJob({ tabId, scope, overrides, targetElementId }) {
   if (jobByTab.has(tabId)) {
-    return { ok: false, error: 'Une capture est déjà en cours dans cet onglet.' };
+    return { ok: false, error: t('errBusy') };
   }
   const tab = await browser.tabs.get(tabId);
-  const reason = restrictionReason(tab.url || '');
+  const blocked = restriction(tab);
   const base = await W2P.loadSettings();
   const settings = W2P.normalizeSettings({ ...base, ...(overrides || {}), ...(scope ? { scope } : {}) });
-  if (reason && !(settings.engine === 'vector' && /mode lecture/.test(reason))) {
-    return { ok: false, error: reason };
+  if (blocked && !(settings.engine === 'vector' && blocked.kind === 'reader')) {
+    return { ok: false, error: blocked.message };
   }
   const job = {
     id: `w2p-${Date.now().toString(36)}-${++seq}`,
@@ -158,6 +160,7 @@ async function startJob({ tabId, scope, overrides }) {
     ratio: 1,
     zoom: 1,
     startedAt: Date.now(),
+    targetElementId: targetElementId == null ? null : targetElementId,
   };
   jobs.set(job.id, job);
   jobByTab.set(tabId, job.id);
@@ -177,12 +180,13 @@ async function runJob(job, tab) {
       job.state = 'done';
       flashBadge(job.tabId, '✓', COLORS.ok, 5000);
       if (!result.vector && !result.cancelledSave) {
-        const size = result.bytes > 1e6 ? `${(result.bytes / 1e6).toFixed(1)} Mo` : `${Math.ceil(result.bytes / 1e3)} Ko`;
+        const size = W2P.i18n.formatBytes(result.bytes);
+        const line =
+          result.pages > 1 ? t('notifDoneMany', result.filename, result.pages, size) : t('notifDoneOne', result.filename, size);
         notify(
           job,
-          'PDF créé',
-          `${result.filename} — ${result.pages} page${result.pages > 1 ? 's' : ''}, ${size}` +
-            (result.warnings && result.warnings.length ? `\n${result.warnings[0]}` : ''),
+          t('notifDoneTitle'),
+          line + (result.warnings && result.warnings.length ? `\n${result.warnings[0]}` : ''),
           result.downloadId,
         );
       }
@@ -198,7 +202,7 @@ async function runJob(job, tab) {
       job.state = 'error';
       job.error = message;
       flashBadge(job.tabId, '!', COLORS.err, 8000);
-      notify(job, 'Conversion impossible', message);
+      notify(job, t('notifErrorTitle'), message);
       result = { ok: false, error: message };
     }
   } finally {
@@ -221,10 +225,7 @@ async function injectAgent(tabId) {
   try {
     await browser.scripting.executeScript({ target: { tabId, frameIds: [0] }, files: ['/content/agent.js'] });
   } catch (e) {
-    throw new Error(
-      `Impossible d’accéder à cette page (${(e && e.message) || e}). ` +
-        'Les pages internes du navigateur et certains sites protégés sont inaccessibles aux extensions.',
-    );
+    throw new Error(t('errInject', (e && e.message) || String(e)));
   }
 }
 
@@ -236,16 +237,16 @@ async function runExact(job, tab) {
   try {
     res = await browser.tabs.sendMessage(
       tab.id,
-      { type: 'w2p:run', jobId: job.id, settings: job.settings, scope: job.scope },
+      { type: 'w2p:run', jobId: job.id, settings: job.settings, scope: job.scope, targetElementId: job.targetElementId },
       { frameId: 0 },
     );
   } catch (e) {
-    throw new Error('La page a été rechargée ou fermée pendant la capture.');
+    throw new Error(t('errReloaded'));
   }
-  if (!res) throw new Error('La page ne répond plus.');
+  if (!res) throw new Error(t('errNoResponse'));
   if (res.cancelled || job.cancelled) return { ok: false, cancelled: true };
-  if (!res.ok) throw new Error(res.error || 'Échec de la capture.');
-  if (!job.placements.length) throw new Error('Aucune image n’a pu être capturée.');
+  if (!res.ok) throw new Error(res.error || t('errCaptureFailed'));
+  if (!job.placements.length) throw new Error(t('errNoImage'));
 
   setPhase(job, 'build', 0, 1);
   const t0 = performance.now();
@@ -276,7 +277,7 @@ async function deliver(job, blob, meta, tab) {
   let filename = W2P.buildFilename(s.filenameTemplate, meta);
   let downloadId = null;
   if (s.afterAction !== 'open') {
-    const attempts = [filename, W2P.buildFilename(s.filenameTemplate, meta, true), 'page-web.pdf'];
+    const attempts = [filename, W2P.buildFilename(s.filenameTemplate, meta, true), 'web-page.pdf'];
     let lastError = null;
     for (const name of attempts) {
       try {
@@ -291,7 +292,7 @@ async function deliver(job, blob, meta, tab) {
         }
       }
     }
-    if (lastError) throw new Error(`Téléchargement refusé : ${lastError.message}`);
+    if (lastError) throw new Error(t('errDownload', lastError.message));
   }
   if (s.afterAction !== 'download') {
     await browser.tabs.create({ url, active: true, index: tab.index + 1, openerTabId: tab.id }).catch(() => {});
@@ -357,8 +358,8 @@ function vectorPageSettings(s, info, filename) {
 }
 
 async function runVector(job, tab) {
-  if (!browser.tabs.saveAsPDF) throw new Error('Ce navigateur ne propose pas l’impression PDF aux extensions.');
-  const reader = /^about:reader/i.test(tab.url || '');
+  if (!browser.tabs.saveAsPDF) throw new Error(t('errNoPrint'));
+  const reader = Boolean(tab.isInReaderMode) || /^about:reader/i.test(tab.url || '');
   // saveAsPDF imprime toujours l'onglet actif.
   await browser.tabs.update(tab.id, { active: true });
   let info = { width: 1280, height: 2000, vw: 1280, vh: 800, title: tab.title, url: tab.url };
@@ -371,7 +372,7 @@ async function runVector(job, tab) {
       { frameId: 0 },
     );
     if (!prep || prep.cancelled) return { ok: false, cancelled: true };
-    if (!prep.ok) throw new Error(prep.error || 'Préparation impossible.');
+    if (!prep.ok) throw new Error(prep.error || t('errPrepare'));
     info = prep.info;
   }
   setPhase(job, 'print');
@@ -391,13 +392,9 @@ async function runVector(job, tab) {
     }
   }
   if (status === 'canceled') return { ok: false, cancelled: true };
-  if (status === 'not_saved' || status === 'not_replaced') throw new Error('Le PDF n’a pas pu être enregistré.');
+  if (status === 'not_saved' || status === 'not_replaced') throw new Error(t('errNotSaved'));
   const warnings = [];
-  if (info.inaccessibleSheets) {
-    warnings.push(
-      `${info.inaccessibleSheets} feuille(s) de style d’un autre domaine n’ont pas pu être adaptées à l’écran.`,
-    );
-  }
+  if (info.inaccessibleSheets) warnings.push(t('warnSheets', info.inaccessibleSheets));
   return { ok: true, vector: true, status, warnings };
 }
 
@@ -414,7 +411,7 @@ async function pngSize(blob) {
 async function onCapture(msg, sender) {
   const job = jobs.get(msg.jobId);
   if (!job || job.cancelled || job.state !== 'running') return { cancelled: true };
-  if (!sender.tab || sender.tab.id !== job.tabId) return { error: 'Onglet inattendu.' };
+  if (!sender.tab || sender.tab.id !== job.tabId) return { error: t('errUnexpectedTab') };
   try {
     const dataUrl = await browser.tabs.captureTab(job.tabId, {
       format: 'png',
@@ -424,7 +421,7 @@ async function onCapture(msg, sender) {
     const blob = await (await fetch(dataUrl)).blob();
     const { pw, ph } = await pngSize(blob);
     if (pw <= 2 && ph <= 2 && msg.rect.width > 4) {
-      return { error: 'Le navigateur a refusé la capture de cette page.' };
+      return { error: t('errCaptureRefused') };
     }
     const imgId = job.images.length;
     job.images.push({ blob, rect: msg.rect, pw, ph });
@@ -434,7 +431,7 @@ async function onCapture(msg, sender) {
     const message = (e && e.message) || String(e);
     // L'onglet vient d'être masqué : l'agent attendra son retour puis réessaiera.
     if (/invisible/i.test(message)) return { retry: true };
-    return { error: `Capture impossible : ${message}` };
+    return { error: t('errCapture', message) };
   }
 }
 
@@ -520,45 +517,82 @@ browser.runtime.onMessage.addListener((msg, sender) => {
 // Menus contextuels et raccourcis clavier
 // -----------------------------------------------------------------------------
 
-const MENU = [
-  ['w2p-full', 'Page entière en PDF', { scope: 'full' }],
-  ['w2p-visible', 'Zone visible en PDF', { scope: 'visible' }],
-  ['w2p-element', 'Choisir un élément…', { scope: 'element' }],
-  ['w2p-region', 'Tracer une zone…', { scope: 'region' }],
-  ['w2p-sep', null, null],
-  ['w2p-vector', 'Page entière (vectoriel, via l’impression)', { scope: 'full', overrides: { engine: 'vector' } }],
-  ['w2p-options', 'Réglages…', null],
+// Les entrées « au pixel près » forcent le moteur exact, quel que soit le réglage par défaut.
+const EXACT = { engine: 'exact' };
+const MENU_ACTIONS = {
+  page: { scope: 'full' }, // entrée directe : réglages de l'utilisateur tels quels
+  full: { scope: 'full', overrides: EXACT },
+  visible: { scope: 'visible', overrides: EXACT },
+  element: { scope: 'element', overrides: EXACT, target: true },
+  region: { scope: 'region', overrides: EXACT },
+  vector: { scope: 'full', overrides: { engine: 'vector' } },
+};
+const PAGE_CONTEXTS = ['page', 'frame', 'selection', 'link', 'image', 'video', 'audio', 'editable'];
+// Modes proposés dans les menus : [action, libellé sur la page, libellé sur l'icône].
+const MENU_ITEMS = [
+  ['full', 'menuFull', 'menuFull'],
+  ['visible', 'menuVisible', 'menuVisible'],
+  ['element', 'menuElementHere', 'menuElement'],
+  ['region', 'menuRegion', 'menuRegion'],
+  ['vector', 'menuVector', 'menuVector'],
+  ['options', 'menuSettings', 'menuSettings'],
 ];
 
-function createMenus() {
-  browser.menus.removeAll().then(() => {
-    const contexts = ['page', 'frame', 'selection', 'link', 'image', 'video', 'audio', 'editable'];
-    browser.menus.create({ id: 'w2p-root', title: 'Web2PDF Exact', contexts });
-    for (const [id, title] of MENU) {
-      if (!title) browser.menus.create({ id, parentId: 'w2p-root', type: 'separator', contexts });
-      else browser.menus.create({ id, parentId: 'w2p-root', title, contexts });
+async function buildMenus() {
+  const s = await W2P.loadSettings();
+  await browser.menus.removeAll();
+  if (s.contextMenu === 'full') {
+    browser.menus.create({ id: 'w2p-root', title: t('extName'), contexts: PAGE_CONTEXTS });
+    for (const [id, pageKey] of MENU_ITEMS) {
+      if (id === 'vector') {
+        browser.menus.create({ id: 'w2p-sep', parentId: 'w2p-root', type: 'separator', contexts: PAGE_CONTEXTS });
+      }
+      browser.menus.create({ id: `w2p-${id}`, parentId: 'w2p-root', title: t(pageKey), contexts: PAGE_CONTEXTS });
     }
-  });
+  } else {
+    // Une seule entrée : Firefox l'affiche directement, sans sous-menu.
+    browser.menus.create({ id: 'w2p-page', title: t('menuConvertPage'), contexts: PAGE_CONTEXTS });
+  }
+  // Clic droit sur l'icône de l'extension : tous les modes (six entrées au plus).
+  for (const [id, , actionKey] of MENU_ITEMS) {
+    browser.menus.create({ id: `w2p-action-${id}`, title: t(actionKey), contexts: ['browser_action'] });
+  }
+}
+
+// Reconstructions en file : deux appels simultanés créeraient des identifiants en double.
+let menusReady = Promise.resolve();
+function createMenus() {
+  menusReady = menusReady.then(buildMenus, buildMenus).catch(() => {});
+  return menusReady;
 }
 
 browser.menus.onClicked.addListener((info, tab) => {
   if (!tab || tab.id == null) return;
-  if (info.menuItemId === 'w2p-options') {
+  const id = String(info.menuItemId).replace(/^w2p-(action-)?/, '');
+  if (id === 'options') {
     browser.runtime.openOptionsPage();
     return;
   }
-  const entry = MENU.find(([id]) => id === info.menuItemId);
-  if (!entry || !entry[2]) return;
-  // Les entrées « au pixel près » forcent le moteur exact, quel que soit le réglage par défaut.
-  const { scope, overrides = { engine: 'exact' } } = entry[2];
-  startJob({ tabId: tab.id, scope, overrides }).then((r) => {
+  const action = MENU_ACTIONS[id];
+  if (!action) return;
+  // « Cet élément… » : la sélection démarre sur l'élément cliqué (cadre principal seulement).
+  const fromPage = !String(info.menuItemId).startsWith('w2p-action-');
+  const targetElementId = action.target && fromPage && info.frameId === 0 ? info.targetElementId : null;
+  startJob({ tabId: tab.id, scope: action.scope, overrides: action.overrides, targetElementId }).then((r) => {
     if (!r.ok) {
       flashBadge(tab.id, '!', COLORS.err, 6000);
       browser.notifications
-        .create({ type: 'basic', iconUrl: browser.runtime.getURL('icons/icon-96.png'), title: 'Web2PDF Exact', message: r.error })
+        .create({ type: 'basic', iconUrl: browser.runtime.getURL('icons/icon-96.png'), title: t('extName'), message: r.error })
         .catch(() => {});
     }
   });
+});
+
+browser.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'local' || !changes.settings) return;
+  const before = (changes.settings.oldValue || {}).contextMenu;
+  const after = (changes.settings.newValue || {}).contextMenu;
+  if (before !== after) createMenus();
 });
 
 browser.commands.onCommand.addListener(async (command) => {

@@ -19,6 +19,12 @@ class Handler(SimpleHTTPRequestHandler):
     def log_message(self, *args):
         pass
 
+    def end_headers(self):
+        # csp.html : politique stricte, sans style ni script en ligne.
+        if urlparse(self.path).path == "/csp.html":
+            self.send_header("Content-Security-Policy", "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self'")
+        super().end_headers()
+
     def do_GET(self):
         url = urlparse(self.path)
         if url.path != "/img":

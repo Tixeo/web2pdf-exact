@@ -7,7 +7,6 @@ var W2P = globalThis.W2P || (globalThis.W2P = {});
   const { PdfWriter, num, hexUtf16, textString, asciiString, pdfDate, deflate, encoder, writeTextLayerFont } =
     W2P.pdf;
 
-  const PRODUCER = 'Web2PDF Exact — Conçu avec l’aide des ressources de Wheeloh';
   const MAX_TILE_PX = 16e6;
 
   // Quelques images décodées gardées en mémoire (les tranches sont lues dans l'ordre).
@@ -260,7 +259,7 @@ var W2P = globalThis.W2P || (globalThis.W2P = {});
           const yHeader = pg.pageH - (mT + headerImg.h) / 2;
           ops.push(`q ${num(hfW)} 0 0 ${num(headerImg.h)} ${num(mL)} ${num(yHeader)} cm /Hd Do Q`);
           xobjects.push(`/Hd ${headerImg.id} 0 R`);
-          const left = hfDate.toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+          const left = hfDate.toLocaleString(W2P.i18n.lang(), { dateStyle: 'short', timeStyle: 'short' });
           const enc = await headerBand(hfW, headerImg.h, left, `${i + 1} / ${pages.length}`, marginColor);
           const footId = w.alloc();
           w.stream(footId, imageDict(enc), enc.data);
@@ -363,10 +362,10 @@ var W2P = globalThis.W2P || (globalThis.W2P = {});
     const now = new Date(man.meta.date || Date.now());
     w.object(
       infoId,
-      `<</Title ${textString(man.meta.title || man.meta.url || 'Page web')}` +
+      `<</Title ${textString(man.meta.title || man.meta.url || W2P.t('pdfUntitled'))}` +
         `/Subject ${textString(man.meta.url || '')}` +
         `/Creator ${textString(`Web2PDF Exact ${browser.runtime.getManifest().version}`)}` +
-        `/Producer ${textString(PRODUCER)}` +
+        `/Producer ${textString(W2P.t('pdfProducer'))}` +
         `/CreationDate (${pdfDate(now)})/ModDate (${pdfDate(now)})>>`,
     );
     w.object(

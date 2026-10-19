@@ -15,6 +15,8 @@
     cv: 'data-w2p-cv',
   };
   const OVERLAY_ID = '__web2pdf_exact_overlay__';
+  // Textes dans la langue du navigateur (_locales).
+  const t = (key, ...subs) => browser.i18n.getMessage(key, subs.length ? subs.map(String) : undefined) || key;
 
   // CSS injecté en origine « utilisateur » : ses !important l'emportent sur ceux de la page.
   const CSS_BASE = `
@@ -45,7 +47,7 @@ html, body { scroll-behavior: auto !important; }
 
   class CancelledError extends Error {
     constructor() {
-      super('Capture annulée');
+      super(t('errCancelled'));
       this.cancelled = true;
     }
   }
@@ -952,7 +954,7 @@ html, body { scroll-behavior: auto !important; }
         if (rowBottom <= needY + 0.25) break;
         needY = rowBottom;
       }
-      if (!shot) throw new Error('Rien à capturer : la zone est vide ou hors de la page.');
+      if (!shot) throw new Error(t('errEmpty'));
     }
 
     // Choisit, entre lo et hi (coordonnées de contenu), la ligne de coupe qui traverse
@@ -1061,7 +1063,7 @@ html, body { scroll-behavior: auto !important; }
       const roi = (this.roi = roiFn());
       if (roi.h > this.s.maxHeight) {
         roi.h = this.s.maxHeight;
-        this.warnings.push(`Page tronquée à ${this.s.maxHeight} px de haut (réglage « Hauteur maximale »).`);
+        this.warnings.push(t('warnTruncatedPage', this.s.maxHeight));
       }
       const toOut = (x, y) => ({ x: x - roi.x, y: y - roi.y });
 
@@ -1088,7 +1090,7 @@ html, body { scroll-behavior: auto !important; }
           shots++;
           this.progress('capture', y + h - roi.y, roi.h);
         }
-        if (!shots) throw new Error('Zone vide.');
+        if (!shots) throw new Error(t('errEmpty'));
         const sx = window.scrollX;
         const sy = window.scrollY;
         this.collect([document], {
@@ -1126,7 +1128,7 @@ html, body { scroll-behavior: auto !important; }
       const w0 = sc.window();
       const contentH = Math.min(this.s.maxHeight, S.scrollHeight);
       if (S.scrollHeight > this.s.maxHeight) {
-        this.warnings.push(`Contenu tronqué à ${this.s.maxHeight} px de haut (réglage « Hauteur maximale »).`);
+        this.warnings.push(t('warnTruncatedContent', this.s.maxHeight));
       }
       const roi = roiContent || { x: w0.contentLeft, y: w0.offsetY, w: w0.w, h: contentH - w0.offsetY };
       roi.h = Math.max(1, Math.min(roi.h, contentH - roi.y));
@@ -1225,7 +1227,16 @@ html, body { scroll-behavior: auto !important; }
       let target = null;
       if (this.scope === 'element') {
         this.phase = 'pick';
-        target = await pickElement(this);
+        // « Cet élément… » (clic droit) : la sélection démarre sur l'élément cliqué.
+        let initial = null;
+        if (this.targetElementId != null && browser.menus && browser.menus.getTargetElement) {
+          try {
+            initial = browser.menus.getTargetElement(this.targetElementId);
+          } catch (e) {
+            initial = null;
+          }
+        }
+        target = await pickElement(this, initial);
       } else if (this.scope === 'region') {
         this.phase = 'pick';
         target = await pickRegion(this);
@@ -1599,7 +1610,7 @@ html, body { scroll-behavior: auto !important; }
     return `${s}  ${Math.round(r.width)} × ${Math.round(r.height)}`;
   }
 
-  function pickElement(job) {
+  function pickElement(job, initial) {
     return new Promise((resolve, reject) => {
       const ui = createOverlay();
       const box = ui.make(
@@ -1613,11 +1624,12 @@ html, body { scroll-behavior: auto !important; }
           'pointer-events: none; display: none; white-space: nowrap; ' +
           UI_FONT,
       );
-      const tb = toolbar(ui, 'Cliquez sur l’élément à convertir  ·  ↑ parent  ↓ enfant  ·  Entrée valider  ·  Échap annuler', [
-        ['ok', 'Valider', true],
-        ['cancel', 'Annuler', false],
+      const tb = toolbar(ui, t('pickHint'), [
+        ['ok', t('btnConfirm'), true],
+        ['cancel', t('btnCancel'), false],
       ]);
-      let cur = null;
+      let cur = initial && initial.isConnected ? initial : null;
+      let lockAt = cur ? null : undefined;
       const chain = [];
       const draw = () => {
         if (!cur || !cur.isConnected) {
@@ -1647,6 +1659,12 @@ html, body { scroll-behavior: auto !important; }
       };
       const cleanup = guardEvents(ui, {
         mousemove: (e) => {
+          // Élément de départ (clic droit) : gardé tant que la souris n'a pas vraiment bougé.
+          if (lockAt !== undefined) {
+            if (!lockAt) lockAt = { x: e.clientX, y: e.clientY };
+            if (Math.hypot(e.clientX - lockAt.x, e.clientY - lockAt.y) < 24) return;
+            lockAt = undefined;
+          }
           const el = deepElementFromPoint(e.clientX, e.clientY);
           if (el && el !== ui.host && el !== cur) {
             cur = el;
@@ -1675,6 +1693,7 @@ html, body { scroll-behavior: auto !important; }
       });
       tb.btns.ok.addEventListener('click', () => cur && finish(cur));
       tb.btns.cancel.addEventListener('click', () => finish(null));
+      if (cur) draw();
     });
   }
 
@@ -1695,9 +1714,7 @@ html, body { scroll-behavior: auto !important; }
           'pointer-events: none; display: none; white-space: nowrap; ' +
           UI_FONT,
       );
-      const tb = toolbar(ui, 'Tracez la zone à convertir (la molette fait défiler)  ·  Échap annuler', [
-        ['cancel', 'Annuler', false],
-      ]);
+      const tb = toolbar(ui, t('regionHint'), [['cancel', t('btnCancel'), false]]);
       let start = null;
       let last = null;
       let auto = 0;
@@ -1792,10 +1809,10 @@ html, body { scroll-behavior: auto !important; }
         'position: fixed; border: 2px solid #ef4444; background: rgba(239,68,68,.16); ' +
           'border-radius: 3px; pointer-events: none; display: none; box-sizing: border-box;',
       );
-      const tb = toolbar(ui, 'Cliquez sur les éléments à retirer  ·  Ctrl+Z rétablir  ·  Entrée capturer  ·  Échap annuler', [
-        ['undo', 'Rétablir', false],
-        ['ok', 'Capturer', true],
-        ['cancel', 'Annuler', false],
+      const tb = toolbar(ui, t('cleanupHint'), [
+        ['undo', t('btnRestore'), false],
+        ['ok', t('btnCapture'), true],
+        ['cancel', t('btnCancel'), false],
       ]);
       const removed = [];
       let cur = null;
@@ -1814,9 +1831,7 @@ html, body { scroll-behavior: auto !important; }
         });
       };
       const update = () => {
-        tb.label.textContent = removed.length
-          ? `${removed.length} élément(s) retiré(s)  ·  Ctrl+Z rétablir  ·  Entrée capturer  ·  Échap annuler`
-          : 'Cliquez sur les éléments à retirer  ·  Ctrl+Z rétablir  ·  Entrée capturer  ·  Échap annuler';
+        tb.label.textContent = removed.length ? t('cleanupHintCount', removed.length) : t('cleanupHint');
       };
       const undo = () => {
         const el = removed.pop();
@@ -1867,8 +1882,9 @@ html, body { scroll-behavior: auto !important; }
   // ---------------------------------------------------------------------------
 
   async function runCapture(msg) {
-    if (current) return { ok: false, error: 'Une capture est déjà en cours dans cet onglet.' };
+    if (current) return { ok: false, error: t('errBusy') };
     const job = (current = new Job(msg.jobId, msg.settings, msg.scope));
+    job.targetElementId = msg.targetElementId == null ? null : msg.targetElementId;
     const onKey = (e) => {
       if (e.key === 'Escape' && job.phase !== 'pick') job.cancelled = true;
     };
@@ -1892,7 +1908,7 @@ html, body { scroll-behavior: auto !important; }
   }
 
   async function prepareVector(msg) {
-    if (current) return { ok: false, error: 'Une capture est déjà en cours dans cet onglet.' };
+    if (current) return { ok: false, error: t('errBusy') };
     const job = (current = new Job(msg.jobId, msg.settings, 'full'));
     try {
       const info = await job.prepareVector();

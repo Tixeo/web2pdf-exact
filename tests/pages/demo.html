@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Demo article — Summer 2026</title>
+    <style>
+      :root { --ink: #1d2433; --accent: #0b7a75; }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; font: 17px/1.6 Georgia, 'Times New Roman', serif; color: var(--ink); background: #fbfaf7; }
+      header.site {
+        position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 50;
+        display: flex; align-items: center; padding: 0 24px;
+        background: #1f2a44; color: #fff; font: 600 16px/1 system-ui, sans-serif;
+      }
+      .layout { display: grid; grid-template-columns: 220px 1fr; gap: 40px; max-width: 1100px; margin: 0 auto; padding: 100px 24px 60px; }
+      nav.toc { position: sticky; top: 80px; align-self: start; padding: 16px; border-radius: 12px; background: #eef3f2; font: 14px/1.5 system-ui, sans-serif; }
+      nav.toc a { display: block; color: var(--accent); }
+      h1 { font-size: 42px; line-height: 1.15; margin: 0 0 20px; }
+      h2 { margin-top: 56px; color: var(--accent); }
+      .lazy-box { width: 600px; height: 300px; background: #ddd; }
+      .lazy-box img { display: block; width: 600px; height: 300px; }
+      .reveal { opacity: 0; transform: translateY(60px); transition: opacity 0.8s ease, transform 0.8s ease; }
+      .reveal.in { opacity: 1; transform: none; }
+      .card { padding: 20px 24px; border-radius: 14px; background: #fff; box-shadow: 0 6px 24px rgba(20, 30, 60, 0.12); margin: 24px 0; }
+      table { border-collapse: collapse; width: 100%; font: 15px system-ui, sans-serif; }
+      td, th { border: 1px solid #cfd6df; padding: 8px 10px; text-align: left; }
+      th { background: #e6ecf5; }
+      .chat { position: fixed; right: 24px; bottom: 24px; width: 64px; height: 64px; border-radius: 50%; background: #e5484d; color: #fff; display: grid; place-items: center; font: 700 13px system-ui; z-index: 60; }
+      .gradient { height: 220px; border-radius: 16px; background: linear-gradient(120deg, #ff8a00, #e52e71 50%, #7b2ff7); }
+      footer { margin-top: 80px; padding: 40px; background: #1f2a44; color: #fff; font: 600 20px system-ui, sans-serif; text-align: center; }
+      .multi { columns: 2; column-gap: 32px; }
+      iframe { width: 100%; height: 140px; border: 2px dashed #0b7a75; border-radius: 10px; background: #fff; }
+    </style>
+  </head>
+  <body>
+    <header class="site">The Demo Magazine</header>
+    <div class="layout">
+      <nav class="toc">
+        <strong>Contents</strong>
+        <a href="#intro">Introduction</a>
+        <a href="#images">Lazy images</a>
+        <a href="#reveal">Reveal effects</a>
+        <a href="#donnees">Data</a>
+        <a href="#langues">Languages</a>
+        <a href="#fin">Conclusion</a>
+      </nav>
+      <main>
+        <h1>Pixel-perfect web pages, saved as PDF</h1>
+        <p id="intro">This demo article shows a page converted to PDF that stays <em>exactly</em> identical to the screen: fonts, gradients, shadows, canvas and iframes are drawn by the browser itself.</p>
+        <p>Both an <a href="https://example.org/">external link</a> and an <a href="#fin">internal link to the conclusion</a> stay clickable in the PDF.</p>
+        <div class="gradient"></div>
+        <p>The text continues after the gradient. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+        <h2 id="images">Images loaded on scroll</h2>
+        <p>A native lazy-loaded image (loading="lazy"), served slowly:</p>
+        <div class="lazy-box"><img loading="lazy" alt="native" src="/img?w=600&amp;h=300&amp;c=ff8800&amp;ms=700&amp;label=NATIVE" /></div>
+        <p>An image loaded by JavaScript (IntersectionObserver), like on most sites:</p>
+        <div class="lazy-box"><img class="js-lazy" alt="js" data-src="/img?w=600&amp;h=300&amp;c=22aa55&amp;ms=900&amp;label=JS" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /></div>
+        <p>Neither image ends up grey in the PDF.</p>
+
+        <h2 id="reveal">Elements revealed on scroll</h2>
+        <div class="card reveal"><strong>Revealed on scroll #1.</strong> This card stays invisible until it has been seen: a classic trap for full-page captures.</div>
+        <div class="card reveal"><strong>Revealed on scroll #2.</strong> Same behaviour, with a 0.8 second transition.</div>
+        <div class="card reveal"><strong>Revealed on scroll #3.</strong> Third animated card.</div>
+        <p class="multi">Two-column text. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+
+        <h2 id="donnees">Data and charts</h2>
+        <table>
+          <tr><th>Month</th><th>Visits</th><th>Conversions</th></tr>
+          <tr><td>June</td><td>12,400</td><td>3.1%</td></tr>
+          <tr><td>July</td><td>15,850</td><td>3.6%</td></tr>
+          <tr><td>August</td><td>9,920</td><td>2.8%</td></tr>
+        </table>
+        <h3>Chart drawn in a canvas</h3>
+        <canvas id="chart" width="640" height="220"></canvas>
+        <h3>Embedded frame (same-site iframe)</h3>
+        <iframe src="frame-en.html" title="cadre"></iframe>
+
+        <h2 id="langues">Many scripts</h2>
+        <p>Emoji: 🚗 🌍 ✅ — Chinese: 这是一个测试句子。 — Arabic: هذه جملة اختبار. — Greek: Καλημέρα κόσμε.</p>
+        <p></p>
+        <div id="filler"></div>
+
+        <h2 id="fin">Conclusion</h2>
+        <p>If you can read this in the PDF, the bottom of the page was captured.</p>
+      </main>
+    </div>
+    <footer>End of page · footer</footer>
+    <div class="chat">CHAT</div>
+    <script>
+      // Remplissage : quelques sections supplémentaires pour une page longue.
+      const filler = document.getElementById('filler');
+      for (let i = 1; i <= 14; i++) {
+        const h = document.createElement('h3');
+        h.textContent = `Additional section ${i}`;
+        const p = document.createElement('p');
+        p.textContent = `Paragraph ${i}. ` + 'This section makes the page longer, to show page breaks and slice-by-slice capture at work. '.repeat(4);
+        filler.append(h, p);
+      }
+      // Canvas
+      const c = document.getElementById('chart').getContext('2d');
+      c.fillStyle = '#f3f6fb'; c.fillRect(0, 0, 640, 220);
+      const vals = [40, 90, 65, 140, 120, 180, 150];
+      vals.forEach((v, i) => { c.fillStyle = i % 2 ? '#0b7a75' : '#e5484d'; c.fillRect(30 + i * 85, 200 - v, 55, v); });
+      // Chargement différé par JavaScript
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.src = e.target.dataset.src; io.unobserve(e.target); }
+      }, { rootMargin: '0px' });
+      document.querySelectorAll('img.js-lazy').forEach((img) => io.observe(img));
+      // Apparition au défilement, réversible (comme AOS avec once: false)
+      const ro = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) e.target.classList.add('in');
+          else if (e.boundingClientRect.top > 0) e.target.classList.remove('in');
+        }
+      }, { threshold: 0.2 });
+      document.querySelectorAll('.reveal').forEach((el) => ro.observe(el));
+    </script>
+  </body>
+</html>

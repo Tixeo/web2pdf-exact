@@ -7,5 +7,5 @@ version=$(python3 -c 'import json; print(json.load(open("manifest.json"))["versi
 out="dist/web2pdf-exact-$version.xpi"
 mkdir -p dist
 rm -f "$out"
-zip -q -r -X -9 "$out" manifest.json background content lib popup options icons -x '*.DS_Store'
+zip -q -r -X -9 "$out" manifest.json _locales background content lib popup options icons -x '*.DS_Store'
 echo "$out ($(du -h "$out" | cut -f1))"

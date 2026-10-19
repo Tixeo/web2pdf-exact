@@ -153,7 +153,8 @@ main {
 .seg button {
   flex: 1;
   min-width: 0;
-  padding: 6px 4px;
+  padding: 6px 3px;
+  font-size: 12.5px;
   border: 0;
   border-radius: 7px;
   background: transparent;
@@ -393,6 +394,14 @@ footer {
 
 .credit {
   color: var(--muted);
+}
+
+button:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 [hidden] {
